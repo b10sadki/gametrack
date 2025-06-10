@@ -1,0 +1,406 @@
+import React, { useState, useEffect } from 'react';
+import { getUserGames, removeUserGame, GameStatus, UserGame, updateUserGameData } from '../lib/gameStorage';
+import { PLATFORMS, Genre } from '../lib/api';
+import { useSwipeElement } from '../hooks/use-swipe';
+import { useIsMobile } from '../hooks/use-mobile';
+import GameDetailsModal from './GameDetailsModal';
+import GenreFilter from './GenreFilter';
+import ExportImport from './ExportImport';
+import { Star, Clock, Trash2, Edit, Heart } from 'lucide-react';
+import { Button } from './ui/button';
+import { Badge } from './ui/badge';
+
+// Composant de liste des jeux de l'utilisateur
+const MyGamesPage: React.FC = () => {
+  const [games, setGames] = useState(getUserGames());
+  const [currentStatus, setCurrentStatus] = useState<GameStatus | 'all'>('all');
+  const [selectedPlatforms, setSelectedPlatforms] = useState<number[]>([]);
+  const [selectedGenres, setSelectedGenres] = useState<number[]>([]);
+  const [selectedGame, setSelectedGame] = useState<UserGame | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const isMobile = useIsMobile();
+  
+  // Rafraîchir la liste des jeux
+  const refreshGames = () => {
+    let filteredGames = getUserGames();
+    
+    // Filtrer par statut
+    if (currentStatus !== 'all') {
+      filteredGames = filteredGames.filter(game => game.status === currentStatus);
+    }
+    
+    // Filtrer par plateforme
+    if (selectedPlatforms.length > 0) {
+      filteredGames = filteredGames.filter(game => 
+        game.platforms.some(p => selectedPlatforms.includes(p.platform.id))
+      );
+    }
+    
+    // Filtrer par genre
+    if (selectedGenres.length > 0) {
+      filteredGames = filteredGames.filter(game => 
+        game.genres.some(g => selectedGenres.includes(g.id))
+      );
+    }
+    
+    setGames(filteredGames);
+  };
+  
+  // Supprimer un jeu
+  const handleRemoveGame = (gameId: number) => {
+    removeUserGame(gameId);
+    refreshGames();
+  };
+  
+  // Changer le filtre de statut
+  const handleStatusChange = (status: GameStatus | 'all') => {
+    setCurrentStatus(status);
+  };
+  
+  // Gérer le changement de plateforme
+  const togglePlatform = (platformId: number) => {
+    setSelectedPlatforms(prev => 
+      prev.includes(platformId)
+        ? prev.filter(id => id !== platformId)
+        : [...prev, platformId]
+    );
+  };
+  
+  // Mettre à jour la liste quand les filtres changent
+  useEffect(() => {
+    refreshGames();
+  }, [currentStatus, selectedPlatforms, selectedGenres]);
+
+  // Obtenir tous les genres disponibles
+  const getAvailableGenres = (): Genre[] => {
+    const allGames = getUserGames();
+    const genresMap = new Map<number, Genre>();
+    
+    allGames.forEach(game => {
+      game.genres.forEach(genre => {
+        genresMap.set(genre.id, genre);
+      });
+    });
+    
+    return Array.from(genresMap.values()).sort((a, b) => a.name.localeCompare(b.name));
+  };
+
+  const handleGameEdit = (game: UserGame) => {
+    setSelectedGame(game);
+    setIsModalOpen(true);
+  };
+
+  const handleModalSave = () => {
+    refreshGames();
+  };
+  
+  // Statistiques
+  const allGames = getUserGames();
+  const stats = {
+    total: allGames.length,
+    backlog: allGames.filter(g => g.status === 'backlog').length,
+    playing: allGames.filter(g => g.status === 'playing').length,
+    completed: allGames.filter(g => g.status === 'completed').length,
+    wishlist: allGames.filter(g => g.status === 'wishlist').length,
+    averageRating: (() => {
+      const ratedGames = allGames.filter(g => g.rating && g.rating > 0);
+      return ratedGames.length > 0 
+        ? ratedGames.reduce((sum, g) => sum + (g.rating || 0), 0) / ratedGames.length 
+        : 0;
+    })(),
+    totalPlayTime: allGames.reduce((sum, g) => sum + (g.playTime || 0), 0)
+  };
+
+  // Composant pour une carte de jeu avec swipe
+  const GameCard: React.FC<{ game: UserGame }> = ({ game }) => {
+    const swipeRef = useSwipeElement({
+      onSwipeLeft: () => isMobile && handleRemoveGame(game.id),
+      onSwipeRight: () => isMobile && handleGameEdit(game),
+      threshold: 100
+    });
+
+    const getStatusColor = (status: GameStatus) => {
+      switch (status) {
+        case 'completed': return 'text-green-400';
+        case 'playing': return 'text-blue-400';
+        case 'backlog': return 'text-yellow-400';
+        case 'wishlist': return 'text-purple-400';
+        default: return 'text-gray-400';
+      }
+    };
+
+    const getStatusIcon = (status: GameStatus) => {
+      switch (status) {
+        case 'wishlist': return <Heart className="w-4 h-4" />;
+        default: return null;
+      }
+    };
+
+    return (
+      <div
+        ref={swipeRef as React.RefObject<HTMLDivElement>}
+        className="game-card bg-card rounded-lg overflow-hidden shadow-sm border relative group"
+      >
+        {isMobile && (
+          <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="text-xs text-muted-foreground bg-background/80 px-2 py-1 rounded">
+              ? Supprimer | Modifier ?
+            </div>
+          </div>
+        )}
+        
+        <div className="aspect-video relative overflow-hidden">
+          {game.background_image ? (
+            <img 
+              src={game.background_image} 
+              alt={game.name}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="w-full h-full bg-muted flex items-center justify-center">
+              <span className="text-muted-foreground">Pas d'image</span>
+            </div>
+          )}
+          
+          {/* Badge de statut */}
+          <div className="absolute top-2 left-2">
+            <Badge className={`${getStatusColor(game.status)} bg-background/80`}>
+              {getStatusIcon(game.status)}
+              {game.status === 'wishlist' ? 'Souhaits' : 
+               game.status === 'backlog' ? 'À jouer' :
+               game.status === 'playing' ? 'En cours' : 'Terminé'}
+            </Badge>
+          </div>
+          
+          {/* Note pour les jeux terminés */}
+          {game.status === 'completed' && game.rating && (
+            <div className="absolute top-2 right-2">
+              <div className="flex items-center gap-1 bg-background/80 px-2 py-1 rounded">
+                <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                <span className="text-xs font-medium">{game.rating}</span>
+              </div>
+            </div>
+          )}
+        </div>
+        
+        <div className="p-3">
+          <h3 className="font-medium text-sm mb-2 line-clamp-2">{game.name}</h3>
+          
+          <div className="space-y-2">
+            {/* Temps de jeu */}
+            {game.playTime && game.playTime > 0 && (
+              <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                <Clock className="w-3 h-3" />
+                <span>{game.playTime}h</span>
+              </div>
+            )}
+            
+            {/* Genres */}
+            <div className="flex flex-wrap gap-1">
+              {game.genres.slice(0, 2).map(genre => (
+                <Badge key={genre.id} variant="outline" className="text-xs">
+                  {genre.name}
+                </Badge>
+              ))}
+              {game.genres.length > 2 && (
+                <Badge variant="outline" className="text-xs">
+                  +{game.genres.length - 2}
+                </Badge>
+              )}
+            </div>
+            
+            {/* Actions */}
+            <div className="flex gap-1 pt-2">
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => handleGameEdit(game)}
+                className="flex-1 h-8"
+              >
+                <Edit className="w-3 h-3 mr-1" />
+                Modifier
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => handleRemoveGame(game.id)}
+                className="h-8 px-2 text-destructive hover:text-destructive"
+              >
+                <Trash2 className="w-3 h-3" />
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+  
+  return (
+    <div className="container mx-auto px-4 py-6">
+      <h1 className="text-2xl font-bold mb-6">Ma liste de jeux</h1>
+      
+      {/* Statistiques */}
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-2 mb-6">
+        <div className="bg-card p-3 rounded-lg text-center">
+          <div className="text-2xl font-bold">{stats.total}</div>
+          <div className="text-xs text-muted-foreground">Total</div>
+        </div>
+        <div className="bg-card p-3 rounded-lg text-center">
+          <div className="text-2xl font-bold text-purple-400">{stats.wishlist}</div>
+          <div className="text-xs text-muted-foreground">Souhaits</div>
+        </div>
+        <div className="bg-card p-3 rounded-lg text-center">
+          <div className="text-2xl font-bold text-yellow-400">{stats.backlog}</div>
+          <div className="text-xs text-muted-foreground">À jouer</div>
+        </div>
+        <div className="bg-card p-3 rounded-lg text-center">
+          <div className="text-2xl font-bold text-blue-400">{stats.playing}</div>
+          <div className="text-xs text-muted-foreground">En cours</div>
+        </div>
+        <div className="bg-card p-3 rounded-lg text-center">
+          <div className="text-2xl font-bold text-green-400">{stats.completed}</div>
+          <div className="text-xs text-muted-foreground">Terminés</div>
+        </div>
+      </div>
+      
+      {/* Statistiques supplémentaires */}
+      {(stats.averageRating > 0 || stats.totalPlayTime > 0) && (
+        <div className="grid grid-cols-2 gap-2 mb-6">
+          {stats.averageRating > 0 && (
+            <div className="bg-card p-3 rounded-lg text-center">
+              <div className="text-xl font-bold flex items-center justify-center gap-1">
+                <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                {stats.averageRating.toFixed(1)}
+              </div>
+              <div className="text-xs text-muted-foreground">Note moyenne</div>
+            </div>
+          )}
+          {stats.totalPlayTime > 0 && (
+            <div className="bg-card p-3 rounded-lg text-center">
+              <div className="text-xl font-bold flex items-center justify-center gap-1">
+                <Clock className="w-4 h-4" />
+                {stats.totalPlayTime}h
+              </div>
+              <div className="text-xs text-muted-foreground">Temps total</div>
+            </div>
+          )}
+        </div>
+      )}
+      
+      {/* Export/Import */}
+      <div className="mb-6">
+        <ExportImport onImportComplete={refreshGames} />
+      </div>
+      
+      {/* Filtres de statut */}
+      <div className="tabs mb-4">
+        <button 
+          className={`tab ${currentStatus === 'all' ? 'tab-active' : 'tab-inactive'}`}
+          onClick={() => handleStatusChange('all')}
+        >
+          Tous
+        </button>
+        <button 
+          className={`tab ${currentStatus === 'wishlist' ? 'tab-active' : 'tab-inactive'}`}
+          onClick={() => handleStatusChange('wishlist')}
+        >
+          Souhaits
+        </button>
+        <button 
+          className={`tab ${currentStatus === 'backlog' ? 'tab-active' : 'tab-inactive'}`}
+          onClick={() => handleStatusChange('backlog')}
+        >
+          À jouer
+        </button>
+        <button 
+          className={`tab ${currentStatus === 'playing' ? 'tab-active' : 'tab-inactive'}`}
+          onClick={() => handleStatusChange('playing')}
+        >
+          En cours
+        </button>
+        <button 
+          className={`tab ${currentStatus === 'completed' ? 'tab-active' : 'tab-inactive'}`}
+          onClick={() => handleStatusChange('completed')}
+        >
+          Terminés
+        </button>
+      </div>
+      
+      {/* Filtres de plateforme et genre */}
+      <div className="flex flex-wrap gap-2 mb-6">
+        {/* Filtres de plateforme */}
+        <div className="flex flex-wrap gap-2">
+          {Object.entries(PLATFORMS).map(([name, id]) => (
+            <button
+              key={id}
+              className={`px-3 py-1 rounded-full text-sm transition-colors ${
+                selectedPlatforms.includes(id)
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-muted text-muted-foreground hover:bg-muted/80'
+              }`}
+              onClick={() => togglePlatform(id)}
+            >
+              {name}
+            </button>
+          ))}
+        </div>
+        
+        {/* Filtre de genre */}
+        <GenreFilter
+          availableGenres={getAvailableGenres()}
+          selectedGenres={selectedGenres}
+          onGenreChange={(genreIds: number[]) => {
+            setSelectedGenres(genreIds);
+          }}
+        />
+      </div>
+      
+      {/* Instructions pour mobile */}
+      {isMobile && games.length > 0 && (
+        <div className="bg-muted/50 p-3 rounded-lg mb-4">
+          <p className="text-sm text-muted-foreground text-center">
+            ?? Glissez vers la gauche pour supprimer, vers la droite pour modifier
+          </p>
+        </div>
+      )}
+      
+      {/* Liste des jeux */}
+      {games.length === 0 ? (
+        <div className="text-center py-12">
+          <p className="text-muted-foreground mb-4">
+            {currentStatus === 'all' 
+              ? 'Aucun jeu dans votre collection'
+              : `Aucun jeu ${currentStatus === 'wishlist' ? 'dans vos souhaits' :
+                           currentStatus === 'backlog' ? 'à jouer' :
+                           currentStatus === 'playing' ? 'en cours' : 'terminé'}`
+            }
+          </p>
+          <p className="text-sm text-muted-foreground">
+            Utilisez l'onglet Recherche pour ajouter des jeux
+          </p>
+        </div>
+      ) : (
+        <div className="responsive-grid">
+          {games.map(game => (
+            <GameCard key={game.id} game={game} />
+          ))}
+        </div>
+      )}
+      
+      {/* Modal de détails du jeu */}
+      {selectedGame && (
+        <GameDetailsModal
+          game={selectedGame}
+          isOpen={isModalOpen}
+          onClose={() => {
+            setIsModalOpen(false);
+            setSelectedGame(null);
+          }}
+          onSave={handleModalSave}
+        />
+      )}
+    </div>
+  );
+};
+
+export default MyGamesPage;
