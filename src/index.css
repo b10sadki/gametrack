@@ -1,9 +1,14 @@
+<<<<<<< HEAD
 /* Global styles for the application with dark theme */
+=======
+/* Styles globaux pour l'application avec thème sombre */
+>>>>>>> cb3fb52bbf3299708f510a1cf36e06b0771e6d14
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
+<<<<<<< HEAD
   /* Improved dark theme with better contrast */
   --background: 222 84% 4.9%; /* Dark blue background */
   --foreground: 210 40% 98%; /* Light text */
@@ -40,19 +45,63 @@ body {
 }
 
 /* Mobile-specific styles */
+=======
+  --background: 240 10% 3.9%;
+  --foreground: 0 0% 98%;
+  
+  --card: 240 10% 3.9%;
+  --card-foreground: 0 0% 98%;
+  
+  --popover: 240 10% 3.9%;
+  --popover-foreground: 0 0% 98%;
+  
+  --primary: 217.2 91.2% 59.8%;
+  --primary-foreground: 222.2 47.4% 11.2%;
+  
+  --secondary: 217.2 32.6% 17.5%;
+  --secondary-foreground: 210 40% 98%;
+  
+  --muted: 217.2 32.6% 17.5%;
+  --muted-foreground: 215 20.2% 65.1%;
+  
+  --accent: 217.2 32.6% 17.5%;
+  --accent-foreground: 210 40% 98%;
+  
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 210 40% 98%;
+  
+  --border: 217.2 32.6% 17.5%;
+  --input: 217.2 32.6% 17.5%;
+  --ring: 212.7 26.8% 83.9%;
+}
+
+body {
+  @apply bg-black text-white;
+  font-feature-settings: "rlig" 1, "calt" 1;
+}
+
+/* Styles spécifiques pour mobile */
+>>>>>>> cb3fb52bbf3299708f510a1cf36e06b0771e6d14
 @media (max-width: 640px) {
   html {
     font-size: 14px;
   }
 }
 
+<<<<<<< HEAD
 /* Game card styles */
 .game-card {
   @apply relative overflow-hidden rounded-lg border border-border bg-card transition-all duration-300 hover:shadow-lg;
+=======
+/* Styles pour les cartes de jeux */
+.game-card {
+  @apply relative overflow-hidden rounded-lg border border-gray-700 bg-gray-900 transition-all duration-300 hover:shadow-lg;
+>>>>>>> cb3fb52bbf3299708f510a1cf36e06b0771e6d14
   height: 100%;
 }
 
 .game-card:hover {
+<<<<<<< HEAD
   @apply border-primary/50 shadow-xl;
   transform: translateY(-4px);
 }
@@ -101,6 +150,11 @@ body {
   @apply px-3 py-1 text-xs rounded-full border border-border transition-colors cursor-pointer bg-secondary text-secondary-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary;
 }
 
+=======
+  transform: translateY(-4px);
+}
+
+>>>>>>> cb3fb52bbf3299708f510a1cf36e06b0771e6d14
 .game-card-image {
   @apply w-full h-40 object-cover;
 }
@@ -114,7 +168,11 @@ body {
 }
 
 .game-card-platforms {
+<<<<<<< HEAD
   @apply text-sm text-muted-foreground mt-1 line-clamp-1;
+=======
+  @apply text-sm text-gray-400 mt-1 line-clamp-1;
+>>>>>>> cb3fb52bbf3299708f510a1cf36e06b0771e6d14
 }
 
 .game-card-status {
@@ -133,6 +191,7 @@ body {
   @apply bg-purple-900 text-purple-100;
 }
 
+<<<<<<< HEAD
 /* Filter styles */
 .filter-chip {
   @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium mr-2 mb-2 cursor-pointer transition-colors bg-muted text-muted-foreground hover:bg-secondary hover:text-secondary-foreground;
@@ -199,3 +258,106 @@ body {
 .install-button {
   @apply bg-blue-600 text-white px-4 py-2 rounded-md font-medium;
 }
+=======
+/* Styles pour les filtres */
+.filter-chip {
+  @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium mr-2 mb-2 cursor-pointer transition-colors;
+}
+
+.filter-chip-active {
+  @apply bg-blue-600 text-white;
+}
+
+.filter-chip-inactive {
+  @apply bg-gray-700 text-gray-200 hover:bg-gray-600;
+}
+
+/* Styles pour la bannière d'installation PWA */
+.install-banner {
+  @apply fixed bottom-16 left-4 right-4 bg-blue-600 text-white p-4 rounded-lg shadow-lg flex items-center justify-between z-50;
+}
+
+.install-button {
+  @apply bg-white text-blue-600 px-4 py-2 rounded font-medium hover:bg-gray-100 transition-colors;
+}
+
+/* Animations pour les graphiques */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.chart-container {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Styles pour les KPI cards */
+.kpi-card {
+  @apply bg-gray-800 rounded-lg p-6 border border-gray-700;
+}
+
+.kpi-value {
+  @apply text-3xl font-bold text-white;
+}
+
+.kpi-label {
+  @apply text-sm text-gray-400 mt-1;
+}
+
+.kpi-change {
+  @apply text-xs mt-2 flex items-center;
+}
+
+.kpi-change.positive {
+  @apply text-green-400;
+}
+
+.kpi-change.negative {
+  @apply text-red-400;
+}
+
+/* Responsive grid pour les cartes de jeux */
+.games-grid {
+  @apply grid gap-4;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+@media (max-width: 640px) {
+  .games-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Styles pour les tooltips */
+.tooltip {
+  @apply absolute z-10 px-2 py-1 text-xs text-white bg-gray-900 rounded shadow-lg;
+}
+
+/* Styles pour les modales */
+.modal-overlay {
+  @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50;
+}
+
+.modal-content {
+  @apply bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4 border border-gray-700;
+}
+
+/* Styles pour les boutons */
+.btn-primary {
+  @apply bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors;
+}
+
+.btn-secondary {
+  @apply bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 transition-colors;
+}
+
+.btn-danger {
+  @apply bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition-colors;
+}
+>>>>>>> cb3fb52bbf3299708f510a1cf36e06b0771e6d14

@@ -3,6 +3,7 @@ module.exports = {
     darkMode: ["class"],
     content: ["./index.html", "./src/**/*.{ts,tsx,js,jsx}"],
   theme: {
+<<<<<<< HEAD
     extend: {
       colors: {
         // New color palette with better contrast
@@ -34,6 +35,9 @@ module.exports = {
         },
         border: '#334155', // Border color
       },
+=======
+  	extend: {
+>>>>>>> cb3fb52bbf3299708f510a1cf36e06b0771e6d14
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
@@ -76,5 +80,9 @@ module.exports = {
   	}
   },
   plugins: [require("tailwindcss-animate")],
+<<<<<<< HEAD
 }
 
+=======
+}
+>>>>>>> cb3fb52bbf3299708f510a1cf36e06b0771e6d14

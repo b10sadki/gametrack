@@ -52,6 +52,7 @@ npm run build
 pnpm build
 ```
 
+<<<<<<< HEAD
 Le résultat de la construction se trouve dans le dossier `dist`.
 
 ## Déploiement
@@ -97,3 +98,46 @@ Vous pouvez modifier les plateformes supportées dans `src/lib/api.ts` en ajusta
 ## Licence
 
 Ce projet est sous licence MIT.
+=======
+### Prévisualisation de la version de production
+
+```bash
+npm run preview
+# ou avec pnpm
+pnpm preview
+```
+
+## Technologies utilisées
+
+- **React 18** avec TypeScript
+- **Vite** pour le build et le développement
+- **Tailwind CSS** pour le styling
+- **Radix UI** pour les composants accessibles
+- **Recharts** pour les graphiques du dashboard
+- **PWA** avec service worker pour le fonctionnement hors-ligne
+
+## Structure du projet
+
+```
+src/
+├── components/          # Composants React
+│   ├── SearchPage.tsx   # Page de recherche de jeux
+│   ├── MyGamesPage.tsx  # Page de gestion de la liste
+│   ├── DashboardPage.tsx # Page des statistiques
+│   └── ui/              # Composants UI réutilisables
+├── lib/                 # Utilitaires et logique métier
+│   ├── api.ts          # API pour récupérer les données de jeux
+│   ├── gameStorage.ts  # Gestion du stockage local
+│   └── utils.ts        # Fonctions utilitaires
+├── hooks/              # Hooks React personnalisés
+└── assets/             # Ressources statiques
+```
+
+## Contribution
+
+Les contributions sont les bienvenues ! N'hésitez pas à ouvrir une issue ou une pull request.
+
+## Licence
+
+Ce projet est sous licence MIT.
+>>>>>>> cb3fb52bbf3299708f510a1cf36e06b0771e6d14
