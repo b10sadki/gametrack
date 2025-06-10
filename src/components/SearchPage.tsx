@@ -42,22 +42,14 @@ const SearchPage: React.FC = () => {
       setTotalCount(result.count);
       setPage(1);
     } catch (err) {
-<<<<<<< HEAD
       setError('Search error. Please try again.');
-=======
-      setError('Erreur lors de la recherche. Veuillez réessayer.');
->>>>>>> cb3fb52bbf3299708f510a1cf36e06b0771e6d14
       console.error(err);
     } finally {
       setLoading(false);
     }
   };
 
-<<<<<<< HEAD
   // Load more results
-=======
-  // Charger plus de résultats
->>>>>>> cb3fb52bbf3299708f510a1cf36e06b0771e6d14
   const loadMore = async () => {
     if (loading || games.length >= totalCount) {
       return;
@@ -77,22 +69,14 @@ const SearchPage: React.FC = () => {
       setGames([...games, ...result.results]);
       setPage(nextPage);
     } catch (err) {
-<<<<<<< HEAD
       setError('Error loading additional results.');
-=======
-      setError('Erreur lors du chargement de résultats supplémentaires.');
->>>>>>> cb3fb52bbf3299708f510a1cf36e06b0771e6d14
       console.error(err);
     } finally {
       setLoading(false);
     }
   };
 
-<<<<<<< HEAD
   // Handle platform change
-=======
-  // Gérer le changement de plateforme
->>>>>>> cb3fb52bbf3299708f510a1cf36e06b0771e6d14
   const togglePlatform = (platformId: number) => {
     setSelectedPlatforms(prev => 
       prev.includes(platformId)
@@ -101,7 +85,6 @@ const SearchPage: React.FC = () => {
     );
   };
 
-<<<<<<< HEAD
   // Add a game to user's list
   const addToUserGames = (game: Game, status: GameStatus) => {
     if (status === 'wishlist') {
@@ -158,22 +141,6 @@ const SearchPage: React.FC = () => {
   };
 
   // Perform search when platforms change
-=======
-  // Ajouter un jeu à la liste de l'utilisateur
-  const addGameToList = (game: Game, status: GameStatus) => {
-    saveUserGame(game, status);
-    // Forcer la mise à jour de l'interface
-    setGames([...games]);
-  };
-
-  // Obtenir le statut actuel d'un jeu
-  const getGameStatus = (gameId: number): GameStatus => {
-    const userGame = getUserGame(gameId);
-    return userGame?.status || 'none';
-  };
-
-  // Effectuer la recherche lorsque les plateformes changent
->>>>>>> cb3fb52bbf3299708f510a1cf36e06b0771e6d14
   useEffect(() => {
     if (selectedPlatforms.length > 0 || query.trim()) {
       handleSearch();
@@ -182,7 +149,6 @@ const SearchPage: React.FC = () => {
 
   return (
     <div className="container mx-auto px-4 py-6">
-<<<<<<< HEAD
       <h1 className="text-2xl font-bold mb-6">Search Games</h1>
       
       {/* Search bar */}
@@ -216,52 +182,10 @@ const SearchPage: React.FC = () => {
             >
               {name}
             </div>
-=======
-      <h1 className="text-2xl font-bold mb-6">Rechercher des jeux</h1>
-      
-      {/* Barre de recherche */}
-      <div className="mb-6">
-        <div className="flex gap-2">
-          <input
-            type="text"
-            placeholder="Rechercher un jeu..."
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-            className="flex-1 px-4 py-2 bg-input border border-border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-          />
-          <button
-            onClick={handleSearch}
-            disabled={loading}
-            className="px-6 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50"
-          >
-            {loading ? '...' : 'Rechercher'}
-          </button>
-        </div>
-      </div>
-      
-      {/* Filtres de plateformes */}
-      <div className="mb-6">
-        <h3 className="text-lg font-semibold mb-3">Plateformes</h3>
-        <div className="flex flex-wrap gap-2">
-          {Object.entries(PLATFORMS).map(([name, id]) => (
-            <button
-              key={id}
-              onClick={() => togglePlatform(id)}
-              className={`filter-chip ${
-                selectedPlatforms.includes(id) 
-                  ? 'filter-chip-active' 
-                  : 'filter-chip-inactive'
-              }`}
-            >
-              {name}
-            </button>
->>>>>>> cb3fb52bbf3299708f510a1cf36e06b0771e6d14
           ))}
         </div>
       </div>
       
-<<<<<<< HEAD
       {/* Search results */}
       {loading && games.length === 0 ? (
         <div className="loading-spinner" />
@@ -404,85 +328,6 @@ const SearchPage: React.FC = () => {
                           </div>
                         )}
                       </div>
-=======
-      {/* Message d'erreur */}
-      {error && (
-        <div className="mb-6 p-4 bg-destructive/10 border border-destructive/20 rounded-lg text-destructive">
-          {error}
-        </div>
-      )}
-      
-      {/* Résultats */}
-      {games.length > 0 && (
-        <div className="mb-6">
-          <h3 className="text-lg font-semibold mb-3">
-            Résultats ({totalCount} jeux trouvés)
-          </h3>
-          
-          <div className="games-grid">
-            {games.map((game) => {
-              const currentStatus = getGameStatus(game.id);
-              
-              return (
-                <div key={game.id} className="game-card">
-                  {game.background_image && (
-                    <img
-                      src={game.background_image}
-                      alt={game.name}
-                      className="game-card-image"
-                    />
-                  )}
-                  
-                  <div className="game-card-content">
-                    <h4 className="game-card-title">{game.name}</h4>
-                    
-                    <div className="game-card-platforms">
-                      {game.platforms?.map(p => p.platform.name).join(', ')}
-                    </div>
-                    
-                    {game.released && (
-                      <div className="text-xs text-muted-foreground mt-1">
-                        Sortie: {new Date(game.released).getFullYear()}
-                      </div>
-                    )}
-                    
-                    {game.rating && (
-                      <div className="text-xs text-muted-foreground mt-1">
-                        Note: {game.rating}/5
-                      </div>
-                    )}
-                    
-                    {/* Boutons d'action */}
-                    <div className="mt-3 flex flex-wrap gap-1">
-                      {currentStatus === 'none' ? (
-                        <>
-                          <button
-                            onClick={() => addGameToList(game, 'backlog')}
-                            className="text-xs px-2 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
-                          >
-                            + À jouer
-                          </button>
-                          <button
-                            onClick={() => addGameToList(game, 'playing')}
-                            className="text-xs px-2 py-1 bg-green-600 text-white rounded hover:bg-green-700"
-                          >
-                            + En cours
-                          </button>
-                          <button
-                            onClick={() => addGameToList(game, 'completed')}
-                            className="text-xs px-2 py-1 bg-purple-600 text-white rounded hover:bg-purple-700"
-                          >
-                            + Terminé
-                          </button>
-                        </>
-                      ) : (
-                        <span className={`game-card-status status-${currentStatus}`}>
-                          {currentStatus === 'backlog' && 'À jouer'}
-                          {currentStatus === 'playing' && 'En cours'}
-                          {currentStatus === 'completed' && 'Terminé'}
-                        </span>
-                      )}
->>>>>>> cb3fb52bbf3299708f510a1cf36e06b0771e6d14
                     </div>
                   </div>
                 </div>
@@ -490,7 +335,6 @@ const SearchPage: React.FC = () => {
             })}
           </div>
           
-<<<<<<< HEAD
           {games.length < totalCount && (
             <div className="mt-8 text-center">
               <Button
@@ -521,46 +365,9 @@ const SearchPage: React.FC = () => {
           }}
           onSave={handleModalSave}
         />
-=======
-          {/* Bouton "Charger plus" */}
-          {games.length < totalCount && (
-            <div className="text-center mt-6">
-              <button
-                onClick={loadMore}
-                disabled={loading}
-                className="px-6 py-2 bg-secondary text-secondary-foreground rounded-lg hover:bg-secondary/90 disabled:opacity-50"
-              >
-                {loading ? 'Chargement...' : 'Charger plus'}
-              </button>
-            </div>
-          )}
-        </div>
-      )}
-      
-      {/* Message si aucun résultat */}
-      {!loading && games.length === 0 && (query.trim() || selectedPlatforms.length > 0) && (
-        <div className="text-center py-12 text-muted-foreground">
-          <div className="text-4xl mb-4">🎮</div>
-          <p>Aucun jeu trouvé pour votre recherche.</p>
-          <p className="text-sm mt-2">Essayez avec d'autres mots-clés ou plateformes.</p>
-        </div>
-      )}
-      
-      {/* Message d'accueil */}
-      {!loading && games.length === 0 && !query.trim() && selectedPlatforms.length === 0 && (
-        <div className="text-center py-12 text-muted-foreground">
-          <div className="text-4xl mb-4">🔝</div>
-          <p>Recherchez vos jeux préférés</p>
-          <p className="text-sm mt-2">Utilisez la barre de recherche ou sélectionnez des plateformes.</p>
-        </div>
->>>>>>> cb3fb52bbf3299708f510a1cf36e06b0771e6d14
       )}
     </div>
   );
 };
 
-<<<<<<< HEAD
 export default SearchPage;
-=======
-export default SearchPage;
->>>>>>> cb3fb52bbf3299708f510a1cf36e06b0771e6d14
