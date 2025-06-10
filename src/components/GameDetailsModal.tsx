@@ -216,12 +216,18 @@ const GameDetailsModal: React.FC<GameDetailsModalProps> = ({ game, isOpen, onClo
 
           {/* Boutons d'action */}
           <div className="flex justify-end gap-2 pt-4">
-            <Button variant="outline" onClick={onClose}>
+            <button
+              onClick={onClose}
+              className="flex items-center px-4 py-2 rounded-lg transition-colors text-muted-foreground hover:text-foreground hover:bg-muted"
+            >
               Cancel
-            </Button>
-            <Button onClick={handleSave}>
+            </button>
+            <button
+              onClick={handleSave}
+              className="flex items-center px-4 py-2 rounded-lg transition-colors bg-primary text-primary-foreground"
+            >
               Save
-            </Button>
+            </button>
           </div>
         </div>
       </DialogContent>
