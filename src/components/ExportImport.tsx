@@ -39,9 +39,9 @@ const ExportImport: React.FC<ExportImportProps> = ({ onImportComplete }) => {
   const handleCopyToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(exportData);
-      // Vous pourriez ajouter une notification toast ici
+      // You could add a toast notification here
     } catch (err) {
-      console.error('Erreur lors de la copie:', err);
+      console.error('Error during copy:', err);
     }
   };
 
@@ -64,7 +64,7 @@ const ExportImport: React.FC<ExportImportProps> = ({ onImportComplete }) => {
       }, 2000);
     } else {
       setImportStatus('error');
-      setImportMessage('Erreur lors de l\'importation. Vérifiez le format des données.');
+      setImportMessage('Import error. Please check the data format.');
     }
   };
 
@@ -102,9 +102,9 @@ const ExportImport: React.FC<ExportImportProps> = ({ onImportComplete }) => {
                 <h4 className="font-medium mb-2">Résumé de vos données</h4>
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>Total de jeux: {stats.total}</div>
-                  <div>Jeux terminés: {stats.completed}</div>
-                  <div>En cours: {stats.playing}</div>
-                  <div>Liste de souhaits: {stats.wishlist}</div>
+                  <div>Completed games: {stats.completed}</div>
+        <div>Playing: {stats.playing}</div>
+        <div>Wishlist: {stats.wishlist}</div>
                 </div>
               </div>
               
@@ -121,7 +121,7 @@ const ExportImport: React.FC<ExportImportProps> = ({ onImportComplete }) => {
               <div className="flex gap-2">
                 <Button onClick={handleDownload} className="flex-1">
                   <FileText className="w-4 h-4 mr-2" />
-                  Télécharger le fichier
+                  Download file
                 </Button>
                 <Button onClick={handleCopyToClipboard} variant="outline" className="flex-1">
                   Copier dans le presse-papiers
@@ -202,7 +202,7 @@ const ExportImport: React.FC<ExportImportProps> = ({ onImportComplete }) => {
                     setImportStatus('idle');
                   }}
                 >
-                  Annuler
+                  Cancel
                 </Button>
               </div>
             </div>

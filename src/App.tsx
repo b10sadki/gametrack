@@ -10,14 +10,14 @@ const App: React.FC = () => {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [showInstallBanner, setShowInstallBanner] = useState(false);
 
-  // GÃ©rer l'Ã©vÃ©nement d'installation PWA
+  // Gérer l'événement d'installation PWA
   useEffect(() => {
     const handleBeforeInstallPrompt = (e: Event) => {
-      // EmpÃªcher Chrome 67+ d'afficher automatiquement la banniÃ¨re d'installation
+      // Empêcher Chrome 67+ d'afficher automatiquement la bannière d'installation
       e.preventDefault();
-      // Stocker l'Ã©vÃ©nement pour pouvoir le dÃ©clencher plus tard
+      // Store the event to trigger it later
       setDeferredPrompt(e);
-      // Mettre Ã  jour l'interface pour montrer le bouton d'installation
+      // Mettre à jour l'interface pour montrer le bouton d'installation
       setShowInstallBanner(true);
     };
 
@@ -34,17 +34,17 @@ const App: React.FC = () => {
       return;
     }
 
-    // Afficher la banniÃ¨re d'installation
+    // Afficher la bannière d'installation
     deferredPrompt.prompt();
 
-    // Attendre que l'utilisateur rÃ©ponde Ã  la banniÃ¨re
+    // Attendre que l'utilisateur réponde à la bannière
     deferredPrompt.userChoice.then((choiceResult: { outcome: string }) => {
       if (choiceResult.outcome === 'accepted') {
-        console.log('Utilisateur a acceptÃ© l\'installation');
+        console.log('Utilisateur a accepté l\'installation');
       } else {
-        console.log('Utilisateur a refusÃ© l\'installation');
+        console.log('Utilisateur a refusé l\'installation');
       }
-      // RÃ©initialiser le prompt diffÃ©rÃ© - il ne peut Ãªtre utilisÃ© qu'une fois
+      // Réinitialiser le prompt différé - il ne peut être utilisé qu'une fois
       setDeferredPrompt(null);
       setShowInstallBanner(false);
     });
@@ -52,7 +52,7 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* En-tÃªte */}
+      {/* En-tête */}
       <header className="sticky top-0 z-10 bg-card border-b border-border">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <h1 className="text-xl font-bold">GameTrack</h1>
@@ -73,30 +73,30 @@ const App: React.FC = () => {
             className={`flex-1 py-3 flex flex-col items-center ${activeTab === 'search' ? 'text-primary' : 'text-muted-foreground'}`}
             onClick={() => setActiveTab('search')}
           >
-            <span className="text-xl">ğŸ”</span>
-            <span className="text-xs mt-1">Recherche</span>
+            <span className="text-xl">??</span>
+            <span className="text-xs mt-1">Search</span>
           </button>
           <button
             className={`flex-1 py-3 flex flex-col items-center ${activeTab === 'myGames' ? 'text-primary' : 'text-muted-foreground'}`}
             onClick={() => setActiveTab('myGames')}
           >
-            <span className="text-xl">ğŸ“‹</span>
+            <span className="text-xl">??</span>
             <span className="text-xs mt-1">Ma Liste</span>
           </button>
           <button
             className={`flex-1 py-3 flex flex-col items-center ${activeTab === 'dashboard' ? 'text-primary' : 'text-muted-foreground'}`}
             onClick={() => setActiveTab('dashboard')}
           >
-            <span className="text-xl">ğŸ“Š</span>
+            <span className="text-xl">??</span>
             <span className="text-xs mt-1">Dashboard</span>
           </button>
         </div>
       </nav>
 
-      {/* BanniÃ¨re d'installation PWA */}
+      {/* Bannière d'installation PWA */}
       {showInstallBanner && (
         <div className="install-banner">
-          <div>Installez GameTrack sur votre Ã©cran d'accueil</div>
+          <div>Installez GameTrack sur votre écran d'accueil</div>
           <button className="install-button" onClick={handleInstallClick}>
             Installer
           </button>

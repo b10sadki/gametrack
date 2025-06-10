@@ -3,7 +3,37 @@ module.exports = {
     darkMode: ["class"],
     content: ["./index.html", "./src/**/*.{ts,tsx,js,jsx}"],
   theme: {
-  	extend: {
+    extend: {
+      colors: {
+        // New color palette with better contrast
+        primary: {
+          DEFAULT: '#3b82f6', // Blue
+          foreground: '#ffffff', // White text on blue
+        },
+        secondary: {
+          DEFAULT: '#1e293b', // Dark blue-gray
+          foreground: '#ffffff', // White text on dark blue-gray
+        },
+        accent: {
+          DEFAULT: '#8b5cf6', // Purple
+          foreground: '#ffffff', // White text on purple
+        },
+        background: '#0f172a', // Dark blue background
+        foreground: '#f8fafc', // Light text
+        card: {
+          DEFAULT: '#1e293b', // Dark blue-gray
+          foreground: '#f8fafc', // Light text
+        },
+        muted: {
+          DEFAULT: '#334155', // Muted blue-gray
+          foreground: '#94a3b8', // Muted text
+        },
+        destructive: {
+          DEFAULT: '#ef4444', // Red
+          foreground: '#ffffff', // White text on red
+        },
+        border: '#334155', // Border color
+      },
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',

@@ -42,12 +42,12 @@ const DashboardPage: React.FC = () => {
   const getFilteredGames = () => {
     let filtered = games;
     
-    // Filtrer par statut
+    // Filter by status
     if (selectedStatus !== 'all') {
       filtered = filtered.filter(game => game.status === selectedStatus);
     }
     
-    // Filtrer par plateforme
+    // Filter by platform
     if (selectedPlatforms.length > 0) {
       filtered = filtered.filter(game => 
         game.platforms.some(p => selectedPlatforms.includes(p.platform.id))
@@ -79,10 +79,10 @@ const DashboardPage: React.FC = () => {
     };
     
     return [
-      { name: 'Souhaits', value: statusCounts.wishlist, color: '#a855f7' },
-      { name: 'À jouer', value: statusCounts.backlog, color: COLORS.backlog },
-      { name: 'En cours', value: statusCounts.playing, color: COLORS.playing },
-      { name: 'Terminés', value: statusCounts.completed, color: COLORS.completed }
+      { name: 'Wishlist', value: statusCounts.wishlist, color: '#a855f7' },
+    { name: 'To Play', value: statusCounts.backlog, color: COLORS.backlog },
+    { name: 'Playing', value: statusCounts.playing, color: COLORS.playing },
+    { name: 'Completed', value: statusCounts.completed, color: COLORS.completed }
     ];
   };
   
@@ -125,10 +125,10 @@ const DashboardPage: React.FC = () => {
     // Dans une version réelle, ces données seraient stockées avec des timestamps
     return [
       { month: 'Jan', total: 10, backlog: 7, playing: 2, completed: 1 },
-      { month: 'Fév', total: 15, backlog: 10, playing: 3, completed: 2 },
-      { month: 'Mar', total: 18, backlog: 11, playing: 3, completed: 4 },
-      { month: 'Avr', total: 22, backlog: 13, playing: 4, completed: 5 },
-      { month: 'Mai', total: 25, backlog: 14, playing: 4, completed: 7 },
+    { month: 'Feb', total: 15, backlog: 10, playing: 3, completed: 2 },
+    { month: 'Mar', total: 18, backlog: 11, playing: 3, completed: 4 },
+    { month: 'Apr', total: 22, backlog: 13, playing: 4, completed: 5 },
+    { month: 'May', total: 25, backlog: 14, playing: 4, completed: 7 },
       { month: 'Juin', total: games.length, 
         backlog: games.filter(g => g.status === 'backlog').length, 
         playing: games.filter(g => g.status === 'playing').length, 
@@ -143,7 +143,7 @@ const DashboardPage: React.FC = () => {
     // Estimation moyenne de 20 heures par jeu (à affiner avec des données RAWG)
     const estimatedHours = backlogGames * 20;
     
-    // Convertir en jours/mois pour plus de lisibilité
+    // Convert to days/months for better readability
     if (estimatedHours < 24) {
       return `${estimatedHours} heures`;
     } else if (estimatedHours < 720) { // Moins d'un mois
@@ -200,7 +200,7 @@ const DashboardPage: React.FC = () => {
         
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">À jouer</CardTitle>
+            <CardTitle className="text-sm font-medium">To Play</CardTitle>
             <Clock className="h-4 w-4 text-yellow-400" />
           </CardHeader>
           <CardContent>
@@ -210,7 +210,7 @@ const DashboardPage: React.FC = () => {
         
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">En cours</CardTitle>
+            <CardTitle className="text-sm font-medium">Playing</CardTitle>
             <TrendingUp className="h-4 w-4 text-blue-400" />
           </CardHeader>
           <CardContent>
@@ -220,7 +220,7 @@ const DashboardPage: React.FC = () => {
         
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Terminés</CardTitle>
+            <CardTitle className="text-sm font-medium">Completed</CardTitle>
             <Trophy className="h-4 w-4 text-green-400" />
           </CardHeader>
           <CardContent>
@@ -306,19 +306,19 @@ const DashboardPage: React.FC = () => {
             className={`tab ${selectedStatus === 'backlog' ? 'tab-active' : 'tab-inactive'}`}
             onClick={() => handleStatusChange('backlog')}
           >
-            À jouer
+            To Play
           </button>
           <button 
             className={`tab ${selectedStatus === 'playing' ? 'tab-active' : 'tab-inactive'}`}
             onClick={() => handleStatusChange('playing')}
           >
-            En cours
+            Playing
           </button>
           <button 
             className={`tab ${selectedStatus === 'completed' ? 'tab-active' : 'tab-inactive'}`}
             onClick={() => handleStatusChange('completed')}
           >
-            Terminés
+            Completed
           </button>
         </div>
         
@@ -415,19 +415,19 @@ const DashboardPage: React.FC = () => {
               <Line 
                 type="monotone" 
                 dataKey="backlog" 
-                name="À jouer" 
+                name="To Play" 
                 stroke={COLORS.backlog} 
               />
               <Line 
                 type="monotone" 
                 dataKey="playing" 
-                name="En cours" 
+                name="Playing" 
                 stroke={COLORS.playing} 
               />
               <Line 
                 type="monotone" 
                 dataKey="completed" 
-                name="Terminés" 
+                name="Completed" 
                 stroke={COLORS.completed} 
               />
             </LineChart>

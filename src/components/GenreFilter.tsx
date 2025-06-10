@@ -47,7 +47,7 @@ const GenreFilter: React.FC<GenreFilterProps> = ({
             <Filter className="w-4 h-4 mr-2" />
             {selectedGenres.length > 0 
               ? `${selectedGenres.length} genre(s) sélectionné(s)`
-              : 'Filtrer par genre'
+              : 'Filter by genre'
             }
           </Button>
         </PopoverTrigger>

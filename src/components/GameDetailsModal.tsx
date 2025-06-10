@@ -99,10 +99,10 @@ const GameDetailsModal: React.FC<GameDetailsModalProps> = ({ game, isOpen, onClo
 
   const getStatusLabel = (gameStatus: GameStatus) => {
     switch (gameStatus) {
-      case 'completed': return 'Terminé';
-      case 'playing': return 'En cours';
-      case 'backlog': return 'À jouer';
-      case 'wishlist': return 'Liste de souhaits';
+      case 'completed': return 'Completed';
+    case 'playing': return 'Playing';
+    case 'backlog': return 'To Play';
+    case 'wishlist': return 'Wishlist';
       default: return 'Non ajouté';
     }
   };
@@ -167,15 +167,15 @@ const GameDetailsModal: React.FC<GameDetailsModalProps> = ({ game, isOpen, onClo
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="none">Non ajouté</SelectItem>
-                <SelectItem value="wishlist">Liste de souhaits</SelectItem>
-                <SelectItem value="backlog">À jouer</SelectItem>
-                <SelectItem value="playing">En cours</SelectItem>
-                <SelectItem value="completed">Terminé</SelectItem>
+                <SelectItem value="wishlist">Wishlist</SelectItem>
+              <SelectItem value="backlog">To Play</SelectItem>
+              <SelectItem value="playing">Playing</SelectItem>
+              <SelectItem value="completed">Completed</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
-          {/* Note (uniquement pour les jeux terminés) */}
+          {/* Note (only for completed games) */}
           {status === 'completed' && (
             <div className="space-y-2">
               <label className="text-sm font-medium">Note personnelle</label>
@@ -217,7 +217,7 @@ const GameDetailsModal: React.FC<GameDetailsModalProps> = ({ game, isOpen, onClo
           {/* Boutons d'action */}
           <div className="flex justify-end gap-2 pt-4">
             <Button variant="outline" onClick={onClose}>
-              Annuler
+              Cancel
             </Button>
             <Button onClick={handleSave}>
               Sauvegarder

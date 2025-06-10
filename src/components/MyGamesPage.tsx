@@ -24,19 +24,19 @@ const MyGamesPage: React.FC = () => {
   const refreshGames = () => {
     let filteredGames = getUserGames();
     
-    // Filtrer par statut
+    // Filter by status
     if (currentStatus !== 'all') {
       filteredGames = filteredGames.filter(game => game.status === currentStatus);
     }
     
-    // Filtrer par plateforme
+    // Filter by platform
     if (selectedPlatforms.length > 0) {
       filteredGames = filteredGames.filter(game => 
         game.platforms.some(p => selectedPlatforms.includes(p.platform.id))
       );
     }
     
-    // Filtrer par genre
+    // Filter by genre
     if (selectedGenres.length > 0) {
       filteredGames = filteredGames.filter(game => 
         game.genres.some(g => selectedGenres.includes(g.id))
@@ -46,7 +46,7 @@ const MyGamesPage: React.FC = () => {
     setGames(filteredGames);
   };
   
-  // Supprimer un jeu
+  // Remove a game
   const handleRemoveGame = (gameId: number) => {
     removeUserGame(gameId);
     refreshGames();
@@ -144,7 +144,7 @@ const MyGamesPage: React.FC = () => {
         {isMobile && (
           <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
             <div className="text-xs text-muted-foreground bg-background/80 px-2 py-1 rounded">
-              ? Supprimer | Modifier ?
+              ? Remove | Edit ?
             </div>
           </div>
         )}
@@ -166,13 +166,13 @@ const MyGamesPage: React.FC = () => {
           <div className="absolute top-2 left-2">
             <Badge className={`${getStatusColor(game.status)} bg-background/80`}>
               {getStatusIcon(game.status)}
-              {game.status === 'wishlist' ? 'Souhaits' : 
-               game.status === 'backlog' ? 'À jouer' :
-               game.status === 'playing' ? 'En cours' : 'Terminé'}
+              {game.status === 'wishlist' ? 'Wishlist' :
+         game.status === 'backlog' ? 'To Play' :
+         game.status === 'playing' ? 'Playing' : 'Completed'}
             </Badge>
           </div>
           
-          {/* Note pour les jeux terminés */}
+          {/* Note for completed games */}
           {game.status === 'completed' && game.rating && (
             <div className="absolute top-2 right-2">
               <div className="flex items-center gap-1 bg-background/80 px-2 py-1 rounded">
@@ -218,7 +218,7 @@ const MyGamesPage: React.FC = () => {
                 className="flex-1 h-8"
               >
                 <Edit className="w-3 h-3 mr-1" />
-                Modifier
+                Edit
               </Button>
               <Button
                 size="sm"
@@ -251,15 +251,15 @@ const MyGamesPage: React.FC = () => {
         </div>
         <div className="bg-card p-3 rounded-lg text-center">
           <div className="text-2xl font-bold text-yellow-400">{stats.backlog}</div>
-          <div className="text-xs text-muted-foreground">À jouer</div>
+          <div className="text-xs text-muted-foreground">To Play</div>
         </div>
         <div className="bg-card p-3 rounded-lg text-center">
           <div className="text-2xl font-bold text-blue-400">{stats.playing}</div>
-          <div className="text-xs text-muted-foreground">En cours</div>
+          <div className="text-xs text-muted-foreground">Playing</div>
         </div>
         <div className="bg-card p-3 rounded-lg text-center">
           <div className="text-2xl font-bold text-green-400">{stats.completed}</div>
-          <div className="text-xs text-muted-foreground">Terminés</div>
+          <div className="text-xs text-muted-foreground">Completed</div>
         </div>
       </div>
       
@@ -310,19 +310,19 @@ const MyGamesPage: React.FC = () => {
           className={`tab ${currentStatus === 'backlog' ? 'tab-active' : 'tab-inactive'}`}
           onClick={() => handleStatusChange('backlog')}
         >
-          À jouer
+          To Play
         </button>
         <button 
           className={`tab ${currentStatus === 'playing' ? 'tab-active' : 'tab-inactive'}`}
           onClick={() => handleStatusChange('playing')}
         >
-          En cours
+          Playing
         </button>
         <button 
           className={`tab ${currentStatus === 'completed' ? 'tab-active' : 'tab-inactive'}`}
           onClick={() => handleStatusChange('completed')}
         >
-          Terminés
+          Completed
         </button>
       </div>
       
@@ -359,7 +359,7 @@ const MyGamesPage: React.FC = () => {
       {isMobile && games.length > 0 && (
         <div className="bg-muted/50 p-3 rounded-lg mb-4">
           <p className="text-sm text-muted-foreground text-center">
-            ?? Glissez vers la gauche pour supprimer, vers la droite pour modifier
+            ?? Swipe left to remove, right to edit
           </p>
         </div>
       )}
@@ -369,14 +369,14 @@ const MyGamesPage: React.FC = () => {
         <div className="text-center py-12">
           <p className="text-muted-foreground mb-4">
             {currentStatus === 'all' 
-              ? 'Aucun jeu dans votre collection'
-              : `Aucun jeu ${currentStatus === 'wishlist' ? 'dans vos souhaits' :
-                           currentStatus === 'backlog' ? 'à jouer' :
-                           currentStatus === 'playing' ? 'en cours' : 'terminé'}`
+              ? 'No games in your collection'
+        : `No ${currentStatus === 'wishlist' ? 'wishlist' :
+            currentStatus === 'backlog' ? 'to play' :
+            currentStatus === 'playing' ? 'playing' : 'completed'} games`
             }
           </p>
           <p className="text-sm text-muted-foreground">
-            Utilisez l'onglet Recherche pour ajouter des jeux
+            Use the Search tab to add games
           </p>
         </div>
       ) : (

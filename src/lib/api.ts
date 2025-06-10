@@ -1,7 +1,7 @@
-// API RAWG pour la r√©cup√©ration des jeux vid√©o
-// Utilise la cl√© API fournie par l'utilisateur
+// RAWG API for video game data retrieval
+// Utilise la clÈ API fournie par l'utilisateur
 
-// Cl√© API RAWG
+// ClÈ API RAWG
 const API_KEY = "2326583f87294eaeb9eba725e9af2777";
 const BASE_URL = "https://api.rawg.io/api";
 
@@ -17,7 +17,7 @@ export const PLATFORMS = {
   "Wii U": 10
 };
 
-// Types pour TypeScript
+// TypeScript types
 export interface Game {
   id: number;
   name: string;
@@ -26,7 +26,7 @@ export interface Game {
   metacritic: number | null;
   platforms: Platform[];
   genres: Genre[];
-  status?: string; // Ajout√© localement
+  status?: string; // AjoutÈ localement
 }
 
 export interface Platform {
@@ -50,17 +50,17 @@ export interface SearchParams {
   page_size?: number;
 }
 
-// Fonction pour rechercher des jeux
+// Function to search for games
 export async function searchGames(params: SearchParams): Promise<{ results: Game[], count: number }> {
   try {
     let url = `${BASE_URL}/games?key=${API_KEY}`;
     
-    // Ajouter les param√®tres de recherche
+    // Ajouter les paramËtres de recherche
     if (params.query) {
       url += `&search=${encodeURIComponent(params.query)}`;
     }
     
-    // Ajouter les plateformes si sp√©cifi√©es
+    // Ajouter les plateformes si spÈcifiÈes
     if (params.platforms && params.platforms.length > 0) {
       url += `&platforms=${params.platforms.join(',')}`;
     }
@@ -73,13 +73,13 @@ export async function searchGames(params: SearchParams): Promise<{ results: Game
     if (params.page_size) {
       url += `&page_size=${params.page_size}`;
     } else {
-      url += '&page_size=20'; // Valeur par d√©faut
+      url += '&page_size=20'; // Valeur par dÈfaut
     }
     
-    // Ajouter le filtre pour les jeux depuis 2005
+    // Add filter for games since 2005
     url += '&dates=2005-01-01,2030-12-31';
     
-    // Effectuer la requ√™te
+    // Effectuer la requÍte
     const response = await fetch(url);
     
     if (!response.ok) {
@@ -97,7 +97,7 @@ export async function searchGames(params: SearchParams): Promise<{ results: Game
   }
 }
 
-// Fonction pour r√©cup√©rer les d√©tails d'un jeu
+// Function to get game details
 export async function getGameDetails(gameId: number): Promise<Game> {
   try {
     const url = `${BASE_URL}/games/${gameId}?key=${API_KEY}`;
@@ -109,12 +109,12 @@ export async function getGameDetails(gameId: number): Promise<Game> {
     
     return await response.json();
   } catch (error) {
-    console.error(`Erreur lors de la r√©cup√©ration des d√©tails du jeu ${gameId}:`, error);
+    console.error(`Erreur lors de la rÈcupÈration des dÈtails du jeu ${gameId}:`, error);
     throw error;
   }
 }
 
-// Fonction pour r√©cup√©rer les jeux par plateforme
+// Function to get games by platform
 export async function getGamesByPlatform(platformId: number, page: number = 1): Promise<{ results: Game[], count: number }> {
   try {
     const url = `${BASE_URL}/games?key=${API_KEY}&platforms=${platformId}&page=${page}&page_size=20&dates=2005-01-01,2030-12-31`;
@@ -130,7 +130,7 @@ export async function getGamesByPlatform(platformId: number, page: number = 1): 
       count: data.count
     };
   } catch (error) {
-    console.error(`Erreur lors de la r√©cup√©ration des jeux pour la plateforme ${platformId}:`, error);
+    console.error(`Error retrieving games for platform ${platformId}:`, error);
     throw error;
   }
 }

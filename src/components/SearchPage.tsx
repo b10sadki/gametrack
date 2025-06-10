@@ -6,7 +6,7 @@ import { Plus, Check, Heart, Clock, Play, Trophy } from 'lucide-react';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 
-// Composant de recherche de jeux
+// Game search component
 const SearchPage: React.FC = () => {
   const [query, setQuery] = useState('');
   const [games, setGames] = useState<Game[]>([]);
@@ -21,7 +21,7 @@ const SearchPage: React.FC = () => {
   const [page, setPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
 
-  // Effectuer la recherche
+  // Perform search
   const handleSearch = async () => {
     if (!query.trim() && selectedPlatforms.length === 0) {
       return;
@@ -42,14 +42,14 @@ const SearchPage: React.FC = () => {
       setTotalCount(result.count);
       setPage(1);
     } catch (err) {
-      setError('Erreur lors de la recherche. Veuillez réessayer.');
+      setError('Search error. Please try again.');
       console.error(err);
     } finally {
       setLoading(false);
     }
   };
 
-  // Charger plus de résultats
+  // Load more results
   const loadMore = async () => {
     if (loading || games.length >= totalCount) {
       return;
@@ -69,14 +69,14 @@ const SearchPage: React.FC = () => {
       setGames([...games, ...result.results]);
       setPage(nextPage);
     } catch (err) {
-      setError('Erreur lors du chargement de résultats supplémentaires.');
+      setError('Error loading additional results.');
       console.error(err);
     } finally {
       setLoading(false);
     }
   };
 
-  // Gérer le changement de plateforme
+  // Handle platform change
   const togglePlatform = (platformId: number) => {
     setSelectedPlatforms(prev => 
       prev.includes(platformId)
@@ -140,7 +140,7 @@ const SearchPage: React.FC = () => {
     }
   };
 
-  // Effectuer la recherche lorsque les plateformes changent
+  // Perform search when platforms change
   useEffect(() => {
     if (selectedPlatforms.length > 0 || query.trim()) {
       handleSearch();
@@ -221,7 +221,7 @@ const SearchPage: React.FC = () => {
                       </div>
                     )}
                     
-                    {/* Badge de statut si déjà ajouté */}
+                    {/* Status badge if already added */}
                     {status && (
                       <div className="absolute top-2 left-2">
                         <Badge className={`${getStatusColor(status)} border-0`}>

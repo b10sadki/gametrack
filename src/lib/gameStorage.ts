@@ -1,9 +1,9 @@
 // Gestion locale des jeux et de leurs statuts
-// Utilise localStorage pour la persistance des données
+// Uses localStorage for data persistence
 
 import { Game } from './api';
 
-// Types pour la gestion des statuts
+// Types for status management
 export type GameStatus = 'backlog' | 'playing' | 'completed' | 'wishlist' | 'none';
 
 export interface UserGame extends Game {
@@ -15,10 +15,10 @@ export interface UserGame extends Game {
   playTime?: number; // Hours played
 }
 
-// Clé pour le stockage localStorage
+// Key for localStorage storage
 const STORAGE_KEY = 'gametrack_user_games';
 
-// Récupérer tous les jeux de l'utilisateur
+// Get all user games
 export function getUserGames(): UserGame[] {
   try {
     const storedGames = localStorage.getItem(STORAGE_KEY);
@@ -38,7 +38,7 @@ export function getUserGame(gameId: number): UserGame | undefined {
   return games.find(game => game.id === gameId);
 }
 
-// Ajouter ou mettre à jour un jeu
+// Add or update a game
 export function saveUserGame(game: Game, status: GameStatus, additionalData?: Partial<Pick<UserGame, 'rating' | 'notes' | 'playTime'>>): void {
   try {
     const games = getUserGames();
@@ -48,7 +48,7 @@ export function saveUserGame(game: Game, status: GameStatus, additionalData?: Pa
     const existingIndex = games.findIndex(g => g.id === game.id);
     
     if (existingIndex >= 0) {
-      // Mettre à jour le jeu existant
+      // Update existing game
       games[existingIndex] = {
         ...games[existingIndex],
         ...game,
@@ -57,7 +57,7 @@ export function saveUserGame(game: Game, status: GameStatus, additionalData?: Pa
         ...additionalData
       };
     } else {
-      // Ajouter un nouveau jeu
+      // Add new game
       games.push({
         ...game,
         status,
@@ -67,7 +67,7 @@ export function saveUserGame(game: Game, status: GameStatus, additionalData?: Pa
       });
     }
     
-    // Sauvegarder dans localStorage
+    // Save to localStorage
     localStorage.setItem(STORAGE_KEY, JSON.stringify(games));
   } catch (error) {
     console.error('Erreur lors de la sauvegarde du jeu:', error);
@@ -105,7 +105,7 @@ export function filterGamesByPlatform(platformId: number): UserGame[] {
   );
 }
 
-// Rechercher dans les jeux locaux
+// Search in local games
 export function searchUserGames(query: string): UserGame[] {
   if (!query.trim()) {
     return getUserGames();
@@ -119,7 +119,7 @@ export function searchUserGames(query: string): UserGame[] {
   );
 }
 
-// Mettre à jour les données supplémentaires d'un jeu
+// Update additional game data
 export function updateUserGameData(gameId: number, data: Partial<Pick<UserGame, 'rating' | 'notes' | 'playTime' | 'status'>>): void {
   try {
     const games = getUserGames();
@@ -134,7 +134,7 @@ export function updateUserGameData(gameId: number, data: Partial<Pick<UserGame, 
       localStorage.setItem(STORAGE_KEY, JSON.stringify(games));
     }
   } catch (error) {
-    console.error('Erreur lors de la mise à jour du jeu:', error);
+    console.error('Error updating game:', error);
   }
 }
 
@@ -174,7 +174,7 @@ export function importUserGames(jsonData: string): boolean {
   }
 }
 
-// Obtenir des statistiques sur la collection
+// Get collection statistics
 export function getUserGameStats() {
   const games = getUserGames();
   const completedGames = games.filter(game => game.status === 'completed');
