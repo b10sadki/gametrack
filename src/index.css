@@ -1,14 +1,9 @@
-<<<<<<< HEAD
 /* Global styles for the application with dark theme */
-=======
-/* Styles globaux pour l'application avec thème sombre */
->>>>>>> cb3fb52bbf3299708f510a1cf36e06b0771e6d14
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-<<<<<<< HEAD
   /* Improved dark theme with better contrast */
   --background: 222 84% 4.9%; /* Dark blue background */
   --foreground: 210 40% 98%; /* Light text */
@@ -45,319 +40,331 @@ body {
 }
 
 /* Mobile-specific styles */
-=======
-  --background: 240 10% 3.9%;
-  --foreground: 0 0% 98%;
-  
-  --card: 240 10% 3.9%;
-  --card-foreground: 0 0% 98%;
-  
-  --popover: 240 10% 3.9%;
-  --popover-foreground: 0 0% 98%;
-  
-  --primary: 217.2 91.2% 59.8%;
-  --primary-foreground: 222.2 47.4% 11.2%;
-  
-  --secondary: 217.2 32.6% 17.5%;
-  --secondary-foreground: 210 40% 98%;
-  
-  --muted: 217.2 32.6% 17.5%;
-  --muted-foreground: 215 20.2% 65.1%;
-  
-  --accent: 217.2 32.6% 17.5%;
-  --accent-foreground: 210 40% 98%;
-  
-  --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 210 40% 98%;
-  
-  --border: 217.2 32.6% 17.5%;
-  --input: 217.2 32.6% 17.5%;
-  --ring: 212.7 26.8% 83.9%;
-}
-
-body {
-  @apply bg-black text-white;
-  font-feature-settings: "rlig" 1, "calt" 1;
-}
-
-/* Styles spécifiques pour mobile */
->>>>>>> cb3fb52bbf3299708f510a1cf36e06b0771e6d14
 @media (max-width: 640px) {
-  html {
-    font-size: 14px;
+  .container {
+    @apply px-2;
+  }
+  
+  .game-card {
+    @apply text-sm;
+  }
+  
+  .game-card img {
+    @apply w-16 h-20;
   }
 }
 
-<<<<<<< HEAD
-/* Game card styles */
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--foreground));
+}
+
+/* Loading animation */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Game card hover effects */
 .game-card {
-  @apply relative overflow-hidden rounded-lg border border-border bg-card transition-all duration-300 hover:shadow-lg;
-=======
-/* Styles pour les cartes de jeux */
-.game-card {
-  @apply relative overflow-hidden rounded-lg border border-gray-700 bg-gray-900 transition-all duration-300 hover:shadow-lg;
->>>>>>> cb3fb52bbf3299708f510a1cf36e06b0771e6d14
-  height: 100%;
+  transition: all 0.2s ease-in-out;
 }
 
 .game-card:hover {
-<<<<<<< HEAD
-  @apply border-primary/50 shadow-xl;
-  transform: translateY(-4px);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
 }
 
-.game-card img {
-  @apply w-full h-48 object-cover;
-}
-
-.game-card .content {
-  @apply p-4;
-}
-
-.game-card .title {
-  @apply text-lg font-semibold text-card-foreground mb-2 line-clamp-2;
-}
-
-.game-card .rating {
-  @apply text-yellow-400 text-sm mb-2;
-}
-
-.game-card .release-date {
-  @apply text-muted-foreground text-sm mb-2;
-}
-
-.game-card .genres {
-  @apply flex flex-wrap gap-1 mb-3;
-}
-
-.game-card .genre-tag {
-  @apply px-2 py-1 bg-muted text-muted-foreground text-xs rounded-full;
-}
-
-.game-card .platforms {
-  @apply flex flex-wrap gap-1 mb-3;
-}
-
-.game-card .platform-tag {
-  @apply px-2 py-1 bg-primary text-primary-foreground text-xs rounded-full;
-}
-
-.game-card .actions {
-  @apply flex flex-wrap gap-2;
-}
-
-.game-card .action-button {
-  @apply px-3 py-1 text-xs rounded-full border border-border transition-colors cursor-pointer bg-secondary text-secondary-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary;
-}
-
-=======
-  transform: translateY(-4px);
-}
-
->>>>>>> cb3fb52bbf3299708f510a1cf36e06b0771e6d14
-.game-card-image {
-  @apply w-full h-40 object-cover;
-}
-
-.game-card-content {
-  @apply p-4;
-}
-
-.game-card-title {
-  @apply text-lg font-semibold line-clamp-1;
-}
-
-.game-card-platforms {
-<<<<<<< HEAD
-  @apply text-sm text-muted-foreground mt-1 line-clamp-1;
-=======
-  @apply text-sm text-gray-400 mt-1 line-clamp-1;
->>>>>>> cb3fb52bbf3299708f510a1cf36e06b0771e6d14
-}
-
-.game-card-status {
-  @apply mt-2 text-xs inline-flex items-center px-2.5 py-0.5 rounded-full;
+/* Status badge styles */
+.status-badge {
+  @apply inline-flex items-center px-2 py-1 rounded-full text-xs font-medium;
 }
 
 .status-backlog {
-  @apply bg-blue-900 text-blue-100;
+  @apply bg-gray-100 text-gray-800;
 }
 
 .status-playing {
-  @apply bg-green-900 text-green-100;
+  @apply bg-blue-100 text-blue-800;
 }
 
 .status-completed {
-  @apply bg-purple-900 text-purple-100;
+  @apply bg-green-100 text-green-800;
 }
 
-<<<<<<< HEAD
-/* Filter styles */
-.filter-chip {
-  @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium mr-2 mb-2 cursor-pointer transition-colors bg-muted text-muted-foreground hover:bg-secondary hover:text-secondary-foreground;
+.status-wishlist {
+  @apply bg-purple-100 text-purple-800;
 }
 
-.filter-chip.active {
-  @apply bg-primary text-primary-foreground;
+/* Dark theme adjustments for status badges */
+.dark .status-backlog {
+  @apply bg-gray-800 text-gray-200;
 }
 
-.filter-chip:not(.active) {
-  @apply bg-muted text-muted-foreground hover:bg-secondary hover:text-secondary-foreground;
+.dark .status-playing {
+  @apply bg-blue-800 text-blue-200;
 }
 
-/* Search bar styles */
-.search-bar {
-  @apply relative w-full;
+.dark .status-completed {
+  @apply bg-green-800 text-green-200;
 }
 
-.search-bar input {
-  @apply w-full px-4 py-2 pl-10 bg-card border border-input rounded-lg text-card-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent;
+.dark .status-wishlist {
+  @apply bg-purple-800 text-purple-200;
 }
 
-.search-bar .search-icon {
-  @apply absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground;
-}
-
-/* Tab styles */
-.tabs {
-  @apply flex border-b border-border mb-4 overflow-x-auto;
-}
-
-.tab {
-  @apply px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground cursor-pointer whitespace-nowrap transition-colors;
-}
-
-.tab.active {
-  @apply text-primary border-b-2 border-primary;
-}
-
-.tab-content {
-  @apply mt-4;
-}
-
-/* Loading styles */
-.loading-spinner {
-  @apply w-8 h-8 border-4 border-primary/30 border-t-primary rounded-full animate-spin mx-auto my-8;
-}
-
-/* Error message styles */
-.error-message {
-  @apply text-destructive text-center my-8;
-}
-
-/* Empty message styles */
-.empty-message {
-  @apply text-muted-foreground text-center my-8;
-}
-
-/* PWA installation styles */
-.install-banner {
-  @apply fixed bottom-0 left-0 right-0 bg-card border-t border-border p-4 flex justify-between items-center text-card-foreground;
-}
-
-.install-button {
-  @apply bg-blue-600 text-white px-4 py-2 rounded-md font-medium;
-}
-=======
-/* Styles pour les filtres */
-.filter-chip {
-  @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium mr-2 mb-2 cursor-pointer transition-colors;
-}
-
-.filter-chip-active {
-  @apply bg-blue-600 text-white;
-}
-
-.filter-chip-inactive {
-  @apply bg-gray-700 text-gray-200 hover:bg-gray-600;
-}
-
-/* Styles pour la bannière d'installation PWA */
-.install-banner {
-  @apply fixed bottom-16 left-4 right-4 bg-blue-600 text-white p-4 rounded-lg shadow-lg flex items-center justify-between z-50;
-}
-
-.install-button {
-  @apply bg-white text-blue-600 px-4 py-2 rounded font-medium hover:bg-gray-100 transition-colors;
-}
-
-/* Animations pour les graphiques */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.chart-container {
-  animation: fadeIn 0.5s ease-out;
-}
-
-/* Styles pour les KPI cards */
-.kpi-card {
-  @apply bg-gray-800 rounded-lg p-6 border border-gray-700;
-}
-
-.kpi-value {
-  @apply text-3xl font-bold text-white;
-}
-
-.kpi-label {
-  @apply text-sm text-gray-400 mt-1;
-}
-
-.kpi-change {
-  @apply text-xs mt-2 flex items-center;
-}
-
-.kpi-change.positive {
-  @apply text-green-400;
-}
-
-.kpi-change.negative {
-  @apply text-red-400;
-}
-
-/* Responsive grid pour les cartes de jeux */
-.games-grid {
-  @apply grid gap-4;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-}
-
-@media (max-width: 640px) {
-  .games-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* Styles pour les tooltips */
-.tooltip {
-  @apply absolute z-10 px-2 py-1 text-xs text-white bg-gray-900 rounded shadow-lg;
-}
-
-/* Styles pour les modales */
-.modal-overlay {
-  @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50;
-}
-
-.modal-content {
-  @apply bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4 border border-gray-700;
-}
-
-/* Styles pour les boutons */
+/* Button hover effects */
 .btn-primary {
-  @apply bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors;
+  @apply bg-primary text-primary-foreground hover:bg-primary/90 transition-colors;
 }
 
 .btn-secondary {
-  @apply bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 transition-colors;
+  @apply bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors;
 }
 
-.btn-danger {
-  @apply bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition-colors;
+/* Form input styles */
+.form-input {
+  @apply w-full px-3 py-2 border border-input bg-background text-foreground rounded-md focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent;
 }
->>>>>>> cb3fb52bbf3299708f510a1cf36e06b0771e6d14
+
+/* Modal overlay */
+.modal-overlay {
+  @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50;
+}
+
+.modal-content {
+  @apply bg-card text-card-foreground rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto;
+}
+
+/* Chart container */
+.chart-container {
+  @apply w-full h-64 md:h-80;
+}
+
+/* Responsive grid */
+.games-grid {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4;
+}
+
+/* Platform filter chips */
+.platform-chip {
+  @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium cursor-pointer transition-colors;
+}
+
+.platform-chip.selected {
+  @apply bg-primary text-primary-foreground;
+}
+
+.platform-chip:not(.selected) {
+  @apply bg-muted text-muted-foreground hover:bg-muted/80;
+}
+
+/* Search input with icon */
+.search-input-container {
+  @apply relative;
+}
+
+.search-input {
+  @apply w-full pl-10 pr-4 py-2 border border-input bg-background text-foreground rounded-md focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent;
+}
+
+.search-icon {
+  @apply absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground;
+}
+
+/* Pagination */
+.pagination {
+  @apply flex items-center justify-center space-x-2 mt-6;
+}
+
+.pagination-button {
+  @apply px-3 py-2 rounded-md border border-input bg-background text-foreground hover:bg-muted transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.pagination-button.active {
+  @apply bg-primary text-primary-foreground border-primary;
+}
+
+/* Stats cards */
+.stats-card {
+  @apply bg-card text-card-foreground p-6 rounded-lg border border-border;
+}
+
+.stats-number {
+  @apply text-3xl font-bold text-primary;
+}
+
+.stats-label {
+  @apply text-sm text-muted-foreground;
+}
+
+/* Progress bar */
+.progress-bar {
+  @apply w-full bg-muted rounded-full h-2;
+}
+
+.progress-fill {
+  @apply bg-primary h-2 rounded-full transition-all duration-300;
+}
+
+/* Toast notifications */
+.toast {
+  @apply fixed bottom-4 right-4 bg-card text-card-foreground p-4 rounded-lg shadow-lg border border-border z-50;
+}
+
+.toast.success {
+  @apply border-green-500;
+}
+
+.toast.error {
+  @apply border-red-500;
+}
+
+/* Loading skeleton */
+.skeleton {
+  @apply animate-pulse bg-muted rounded;
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+  @apply absolute right-0 mt-2 w-48 bg-card text-card-foreground rounded-md shadow-lg border border-border z-10;
+}
+
+.dropdown-item {
+  @apply block px-4 py-2 text-sm hover:bg-muted cursor-pointer;
+}
+
+/* Tab navigation */
+.tab-nav {
+  @apply flex space-x-1 bg-muted p-1 rounded-lg;
+}
+
+.tab-button {
+  @apply flex-1 px-3 py-2 text-sm font-medium rounded-md transition-colors;
+}
+
+.tab-button.active {
+  @apply bg-background text-foreground shadow-sm;
+}
+
+.tab-button:not(.active) {
+  @apply text-muted-foreground hover:text-foreground;
+}
+
+/* Install banner */
+.install-banner {
+  @apply bg-primary text-primary-foreground p-3 flex items-center justify-between;
+}
+
+.install-button {
+  @apply bg-primary-foreground text-primary px-4 py-1 rounded hover:bg-opacity-90 transition-colors;
+}
+
+/* Game details modal specific styles */
+.game-modal .game-cover {
+  @apply w-full h-64 object-cover rounded-lg;
+}
+
+.game-modal .game-info {
+  @apply space-y-4;
+}
+
+.game-modal .game-description {
+  @apply text-muted-foreground leading-relaxed;
+}
+
+.game-modal .game-meta {
+  @apply grid grid-cols-2 gap-4 text-sm;
+}
+
+.game-modal .meta-label {
+  @apply font-medium text-foreground;
+}
+
+.game-modal .meta-value {
+  @apply text-muted-foreground;
+}
+
+/* Platform badges */
+.platform-badge {
+  @apply inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-muted text-muted-foreground;
+}
+
+/* Genre tags */
+.genre-tag {
+  @apply inline-block px-2 py-1 rounded-full text-xs bg-accent text-accent-foreground;
+}
+
+/* Rating stars */
+.rating-stars {
+  @apply flex items-center space-x-1;
+}
+
+.star {
+  @apply w-4 h-4 text-yellow-400;
+}
+
+.star.filled {
+  @apply text-yellow-400;
+}
+
+.star.empty {
+  @apply text-muted-foreground;
+}
+
+/* Dashboard specific styles */
+.dashboard-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6;
+}
+
+.chart-card {
+  @apply bg-card text-card-foreground p-6 rounded-lg border border-border;
+}
+
+.chart-title {
+  @apply text-lg font-semibold mb-4;
+}
+
+/* Responsive utilities */
+@media (max-width: 768px) {
+  .mobile-hidden {
+    @apply hidden;
+  }
+  
+  .mobile-full {
+    @apply w-full;
+  }
+  
+  .mobile-stack {
+    @apply flex-col;
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    @apply hidden;
+  }
+  
+  .print-break {
+    page-break-after: always;
+  }
+}

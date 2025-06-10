@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-<<<<<<< HEAD
 import { searchGames, Game, PLATFORMS } from '../lib/api';
 import { saveUserGame, getUserGame, GameStatus, UserGame } from '../lib/gameStorage';
 import GameDetailsModal from './GameDetailsModal';
@@ -23,22 +22,6 @@ const SearchPage: React.FC = () => {
   const [totalCount, setTotalCount] = useState(0);
 
   // Perform search
-=======
-import { searchGames, PLATFORMS, Game } from '../lib/api';
-import { saveUserGame, getUserGame, GameStatus } from '../lib/gameStorage';
-
-// Composant de recherche de jeux
-const SearchPage: React.FC = () => {
-  const [query, setQuery] = useState('');
-  const [selectedPlatforms, setSelectedPlatforms] = useState<number[]>([]);
-  const [games, setGames] = useState<Game[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [page, setPage] = useState(1);
-  const [totalCount, setTotalCount] = useState(0);
-
-  // Effectuer la recherche
->>>>>>> cb3fb52bbf3299708f510a1cf36e06b0771e6d14
   const handleSearch = async () => {
     if (!query.trim() && selectedPlatforms.length === 0) {
       return;
@@ -566,7 +549,7 @@ const SearchPage: React.FC = () => {
       {/* Message d'accueil */}
       {!loading && games.length === 0 && !query.trim() && selectedPlatforms.length === 0 && (
         <div className="text-center py-12 text-muted-foreground">
-          <div className="text-4xl mb-4">🔍</div>
+          <div className="text-4xl mb-4">🔝</div>
           <p>Recherchez vos jeux préférés</p>
           <p className="text-sm mt-2">Utilisez la barre de recherche ou sélectionnez des plateformes.</p>
         </div>
