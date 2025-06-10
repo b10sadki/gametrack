@@ -5,52 +5,56 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // New color palette with better contrast
+        border: 'hsl(var(--border))',
+        input: 'hsl(var(--input))',
+        ring: 'hsl(var(--ring))',
+        background: 'hsl(var(--background))',
+        foreground: 'hsl(var(--foreground))',
         primary: {
-          DEFAULT: '#3b82f6', // Blue
-          foreground: '#ffffff', // White text on blue
+          DEFAULT: 'hsl(var(--primary))',
+          foreground: 'hsl(var(--primary-foreground))'
         },
         secondary: {
-          DEFAULT: '#1e293b', // Dark blue-gray
-          foreground: '#ffffff', // White text on dark blue-gray
-        },
-        accent: {
-          DEFAULT: '#8b5cf6', // Purple
-          foreground: '#ffffff', // White text on purple
-        },
-        background: '#0f172a', // Dark blue background
-        foreground: '#f8fafc', // Light text
-        card: {
-          DEFAULT: '#1e293b', // Dark blue-gray
-          foreground: '#f8fafc', // Light text
-        },
-        muted: {
-          DEFAULT: '#334155', // Muted blue-gray
-          foreground: '#94a3b8', // Muted text
+          DEFAULT: 'hsl(var(--secondary))',
+          foreground: 'hsl(var(--secondary-foreground))'
         },
         destructive: {
-          DEFAULT: '#ef4444', // Red
-          foreground: '#ffffff', // White text on red
+          DEFAULT: 'hsl(var(--destructive))',
+          foreground: 'hsl(var(--destructive-foreground))'
         },
-        border: '#334155', // Border color
+        muted: {
+          DEFAULT: 'hsl(var(--muted))',
+          foreground: 'hsl(var(--muted-foreground))'
+        },
+        accent: {
+          DEFAULT: 'hsl(var(--accent))',
+          foreground: 'hsl(var(--accent-foreground))'
+        },
+        popover: {
+          DEFAULT: 'hsl(var(--popover))',
+          foreground: 'hsl(var(--popover-foreground))'
+        },
+        card: {
+          DEFAULT: 'hsl(var(--card))',
+          foreground: 'hsl(var(--card-foreground))'
+        },
+        sidebar: {
+          DEFAULT: 'hsl(var(--sidebar-background))',
+          foreground: 'hsl(var(--sidebar-foreground))',
+          primary: 'hsl(var(--sidebar-primary))',
+          'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
+          accent: 'hsl(var(--sidebar-accent))',
+          'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
+          border: 'hsl(var(--sidebar-border))',
+          ring: 'hsl(var(--sidebar-ring))'
+        }
       },
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
   		},
-  		colors: {
-  			sidebar: {
-  				DEFAULT: 'hsl(var(--sidebar-background))',
-  				foreground: 'hsl(var(--sidebar-foreground))',
-  				primary: 'hsl(var(--sidebar-primary))',
-  				'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
-  				accent: 'hsl(var(--sidebar-accent))',
-  				'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
-  				border: 'hsl(var(--sidebar-border))',
-  				ring: 'hsl(var(--sidebar-ring))'
-  			}
-  		},
+
   		keyframes: {
   			'accordion-down': {
   				from: {
@@ -76,9 +80,4 @@ module.exports = {
   	}
   },
   plugins: [require("tailwindcss-animate")],
-<<<<<<< HEAD
 }
-
-=======
-}
->>>>>>> cb3fb52bbf3299708f510a1cf36e06b0771e6d14
