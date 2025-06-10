@@ -68,7 +68,7 @@ const DashboardPage: React.FC = () => {
     gamesWithNotes: games.filter(g => g.notes && g.notes.trim().length > 0).length
   };
 
-  // Préparer les données pour le graphique en donut (statuts)
+  // Prepare data for donut chart (statuses)
   const prepareStatusData = () => {
     const filtered = getFilteredGames();
     const statusCounts = {
@@ -86,17 +86,17 @@ const DashboardPage: React.FC = () => {
     ];
   };
   
-  // Préparer les données pour le graphique en barres (plateformes)
+  // Prepare data for bar chart (platforms)
   const preparePlatformData = () => {
     const filtered = getFilteredGames();
     const platformCounts: Record<string, number> = {};
     
-    // Initialiser les compteurs pour chaque plateforme
+    // Initialize counters for each platform
     Object.entries(PLATFORMS).forEach(([name]) => {
       platformCounts[name] = 0;
     });
     
-    // Compter les jeux par plateforme
+    // Count games by platform
     filtered.forEach(game => {
       game.platforms.forEach(p => {
         const platformName = Object.entries(PLATFORMS).find(
@@ -111,7 +111,7 @@ const DashboardPage: React.FC = () => {
     
     // Convertir en tableau pour le graphique
     return Object.entries(platformCounts)
-      .filter(([, count]) => count > 0) // Exclure les plateformes sans jeux
+      .filter(([, count]) => count > 0) // Exclude platforms without games
       .map(([name, count], index) => ({
         name,
         count,
@@ -119,9 +119,9 @@ const DashboardPage: React.FC = () => {
       }));
   };
   
-  // Préparer les données pour le graphique en ligne (évolution temporelle)
+  // Prepare data for line chart (timeline evolution)
   const prepareTimelineData = () => {
-    // Simuler des données d'évolution (à remplacer par des données réelles)
+    // Simulate evolution data (to be replaced with real data)
     // Dans une version réelle, ces données seraient stockées avec des timestamps
     return [
       { month: 'Jan', total: 10, backlog: 7, playing: 2, completed: 1 },
@@ -140,25 +140,25 @@ const DashboardPage: React.FC = () => {
   // Calculer le temps estimé pour terminer le backlog
   const calculateBacklogTime = () => {
     const backlogGames = games.filter(g => g.status === 'backlog').length;
-    // Estimation moyenne de 20 heures par jeu (à affiner avec des données RAWG)
+    // Average estimation of 20 hours per game (to be refined with RAWG data)
     const estimatedHours = backlogGames * 20;
     
     // Convert to days/months for better readability
     if (estimatedHours < 24) {
-      return `${estimatedHours} heures`;
-    } else if (estimatedHours < 720) { // Moins d'un mois
-      return `${Math.round(estimatedHours / 24)} jours`;
+      return `${estimatedHours} hours`;
+    } else if (estimatedHours < 720) { // Less than a month
+      return `${Math.round(estimatedHours / 24)} days`;
     } else {
-      return `${Math.round(estimatedHours / 720)} mois`;
+      return `${Math.round(estimatedHours / 720)} months`;
     }
   };
   
-  // Gérer le changement de filtre de statut
+  // Handle status filter change
   const handleStatusChange = (status: GameStatus | 'all') => {
     setSelectedStatus(status);
   };
   
-  // Gérer le changement de filtre de plateforme
+  // Handle platform filter change
   const togglePlatform = (platformId: number) => {
     setSelectedPlatforms(prev => 
       prev.includes(platformId)
@@ -252,13 +252,13 @@ const DashboardPage: React.FC = () => {
           {additionalStats.totalPlayTime > 0 && (
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Temps de jeu total</CardTitle>
+                <CardTitle className="text-sm font-medium">Total play time</CardTitle>
                 <Clock className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{additionalStats.totalPlayTime}h</div>
                 <p className="text-xs text-muted-foreground">
-                  Moyenne: {(additionalStats.totalPlayTime / Math.max(stats.total - stats.wishlist, 1)).toFixed(1)}h par jeu
+                  Average: {(additionalStats.totalPlayTime / Math.max(stats.total - stats.wishlist, 1)).toFixed(1)}h per game
                 </p>
               </CardContent>
             </Card>
@@ -286,7 +286,7 @@ const DashboardPage: React.FC = () => {
         <h2 className="text-lg font-semibold mb-2">Temps estimé pour terminer votre backlog</h2>
         <div className="text-3xl font-bold text-blue-400">{calculateBacklogTime()}</div>
         <div className="text-xs text-gray-400 mt-1">
-          Basé sur une estimation moyenne de 20 heures par jeu
+          Based on an average estimation of 20 hours per game
         </div>
       </div>
       
@@ -294,7 +294,7 @@ const DashboardPage: React.FC = () => {
       <div className="mb-6">
         <h2 className="text-lg font-semibold mb-2">Filtres</h2>
         
-        {/* Filtres de statut */}
+        {/* Status filters */}
         <div className="tabs mb-4">
           <button 
             className={`tab ${selectedStatus === 'all' ? 'tab-active' : 'tab-inactive'}`}
@@ -322,7 +322,7 @@ const DashboardPage: React.FC = () => {
           </button>
         </div>
         
-        {/* Filtres de plateforme */}
+        {/* Platform filters */}
         <div className="overflow-x-auto">
           <div className="flex flex-wrap">
             {Object.entries(PLATFORMS).map(([name, id]) => (
@@ -338,9 +338,9 @@ const DashboardPage: React.FC = () => {
         </div>
       </div>
       
-      {/* Graphique en donut - Répartition par statut */}
+      {/* Donut chart - Distribution by status */}
       <div className="bg-gray-900 p-4 rounded-lg mb-6">
-        <h2 className="text-lg font-semibold mb-4">Répartition par statut</h2>
+        <h2 className="text-lg font-semibold mb-4">Distribution by status</h2>
         <div className="h-64">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
@@ -364,9 +364,9 @@ const DashboardPage: React.FC = () => {
         </div>
       </div>
       
-      {/* Graphique en barres - Répartition par plateforme */}
+      {/* Bar chart - Distribution by platform */}
       <div className="bg-gray-900 p-4 rounded-lg mb-6">
-        <h2 className="text-lg font-semibold mb-4">Répartition par plateforme</h2>
+        <h2 className="text-lg font-semibold mb-4">Distribution by platform</h2>
         <div className="h-64">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart

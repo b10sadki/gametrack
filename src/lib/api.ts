@@ -1,11 +1,11 @@
 // RAWG API for video game data retrieval
-// Utilise la clé API fournie par l'utilisateur
+// Uses the API key provided by the user
 
 // Clé API RAWG
 const API_KEY = "2326583f87294eaeb9eba725e9af2777";
 const BASE_URL = "https://api.rawg.io/api";
 
-// Mapping des ID de plateformes RAWG
+// RAWG platform ID mapping
 export const PLATFORMS = {
   "Steam": 4,
   "PlayStation 5": 187,
@@ -55,12 +55,12 @@ export async function searchGames(params: SearchParams): Promise<{ results: Game
   try {
     let url = `${BASE_URL}/games?key=${API_KEY}`;
     
-    // Ajouter les paramètres de recherche
+    // Add search parameters
     if (params.query) {
       url += `&search=${encodeURIComponent(params.query)}`;
     }
     
-    // Ajouter les plateformes si spécifiées
+    // Add platforms if specified
     if (params.platforms && params.platforms.length > 0) {
       url += `&platforms=${params.platforms.join(',')}`;
     }
@@ -73,7 +73,7 @@ export async function searchGames(params: SearchParams): Promise<{ results: Game
     if (params.page_size) {
       url += `&page_size=${params.page_size}`;
     } else {
-      url += '&page_size=20'; // Valeur par défaut
+      url += '&page_size=20'; // Default value
     }
     
     // Add filter for games since 2005

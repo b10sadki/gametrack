@@ -103,7 +103,7 @@ const GameDetailsModal: React.FC<GameDetailsModalProps> = ({ game, isOpen, onClo
     case 'playing': return 'Playing';
     case 'backlog': return 'To Play';
     case 'wishlist': return 'Wishlist';
-      default: return 'Non ajouté';
+      default: return 'Not added';
     }
   };
 
@@ -130,7 +130,7 @@ const GameDetailsModal: React.FC<GameDetailsModalProps> = ({ game, isOpen, onClo
               {game.released && (
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <Calendar className="w-4 h-4" />
-                  {new Date(game.released).toLocaleDateString('fr-FR')}
+                  {new Date(game.released).toLocaleDateString('en-US')}
                 </div>
               )}
               {game.metacritic && (
@@ -158,15 +158,15 @@ const GameDetailsModal: React.FC<GameDetailsModalProps> = ({ game, isOpen, onClo
             </div>
           </div>
 
-          {/* Statut */}
+          {/* Status */}
           <div className="space-y-2">
-            <label className="text-sm font-medium">Statut</label>
+            <label className="text-sm font-medium">Status</label>
             <Select value={status} onValueChange={(value: GameStatus) => setStatus(value)}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="none">Non ajouté</SelectItem>
+                <SelectItem value="none">Not added</SelectItem>
                 <SelectItem value="wishlist">Wishlist</SelectItem>
               <SelectItem value="backlog">To Play</SelectItem>
               <SelectItem value="playing">Playing</SelectItem>
@@ -178,17 +178,17 @@ const GameDetailsModal: React.FC<GameDetailsModalProps> = ({ game, isOpen, onClo
           {/* Note (only for completed games) */}
           {status === 'completed' && (
             <div className="space-y-2">
-              <label className="text-sm font-medium">Note personnelle</label>
+              <label className="text-sm font-medium">Personal rating</label>
               {renderStars()}
             </div>
           )}
 
-          {/* Temps de jeu */}
+          {/* Play time */}
           {(status === 'playing' || status === 'completed') && (
             <div className="space-y-2">
               <label className="text-sm font-medium flex items-center gap-2">
                 <Clock className="w-4 h-4" />
-                Temps de jeu (heures)
+                Play time (hours)
               </label>
               <Input
                 type="number"
@@ -201,14 +201,14 @@ const GameDetailsModal: React.FC<GameDetailsModalProps> = ({ game, isOpen, onClo
             </div>
           )}
 
-          {/* Notes personnelles */}
+          {/* Personal notes */}
           {status !== 'none' && (
             <div className="space-y-2">
-              <label className="text-sm font-medium">Notes personnelles</label>
+              <label className="text-sm font-medium">Personal notes</label>
               <Textarea
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                placeholder="Vos impressions, commentaires, conseils..."
+                placeholder="Your impressions, comments, tips..."
                 rows={4}
               />
             </div>
@@ -220,7 +220,7 @@ const GameDetailsModal: React.FC<GameDetailsModalProps> = ({ game, isOpen, onClo
               Cancel
             </Button>
             <Button onClick={handleSave}>
-              Sauvegarder
+              Save
             </Button>
           </div>
         </div>

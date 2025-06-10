@@ -1,4 +1,4 @@
-// Gestion locale des jeux et de leurs statuts
+// Local management of games and their statuses
 // Uses localStorage for data persistence
 
 import { Game } from './api';
@@ -85,7 +85,7 @@ export function removeUserGame(gameId: number): void {
   }
 }
 
-// Filtrer les jeux par statut
+// Filter games by status
 export function filterGamesByStatus(status: GameStatus | 'all'): UserGame[] {
   const games = getUserGames();
   
@@ -96,7 +96,7 @@ export function filterGamesByStatus(status: GameStatus | 'all'): UserGame[] {
   return games.filter(game => game.status === status);
 }
 
-// Filtrer les jeux par plateforme
+// Filter games by platform
 export function filterGamesByPlatform(platformId: number): UserGame[] {
   const games = getUserGames();
   
@@ -138,7 +138,7 @@ export function updateUserGameData(gameId: number, data: Partial<Pick<UserGame, 
   }
 }
 
-// Filtrer les jeux par genre
+// Filter games by genre
 export function filterGamesByGenre(genreIds: number[]): UserGame[] {
   if (genreIds.length === 0) return getUserGames();
   

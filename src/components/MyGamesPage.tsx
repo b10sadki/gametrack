@@ -57,7 +57,7 @@ const MyGamesPage: React.FC = () => {
     setCurrentStatus(status);
   };
   
-  // Gérer le changement de plateforme
+  // Handle platform change
   const togglePlatform = (platformId: number) => {
     setSelectedPlatforms(prev => 
       prev.includes(platformId)
@@ -326,9 +326,9 @@ const MyGamesPage: React.FC = () => {
         </button>
       </div>
       
-      {/* Filtres de plateforme et genre */}
+      {/* Platform and genre filters */}
       <div className="flex flex-wrap gap-2 mb-6">
-        {/* Filtres de plateforme */}
+        {/* Platform filters */}
         <div className="flex flex-wrap gap-2">
           {Object.entries(PLATFORMS).map(([name, id]) => (
             <button
