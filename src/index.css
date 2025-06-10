@@ -1,0 +1,190 @@
+/* Styles globaux pour l'application avec thème sombre */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 240 10% 3.9%;
+  --foreground: 0 0% 98%;
+  
+  --card: 240 10% 3.9%;
+  --card-foreground: 0 0% 98%;
+  
+  --popover: 240 10% 3.9%;
+  --popover-foreground: 0 0% 98%;
+  
+  --primary: 217.2 91.2% 59.8%;
+  --primary-foreground: 222.2 47.4% 11.2%;
+  
+  --secondary: 217.2 32.6% 17.5%;
+  --secondary-foreground: 210 40% 98%;
+  
+  --muted: 217.2 32.6% 17.5%;
+  --muted-foreground: 215 20.2% 65.1%;
+  
+  --accent: 217.2 32.6% 17.5%;
+  --accent-foreground: 210 40% 98%;
+  
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 210 40% 98%;
+  
+  --border: 217.2 32.6% 17.5%;
+  --input: 217.2 32.6% 17.5%;
+  --ring: 212.7 26.8% 83.9%;
+}
+
+body {
+  @apply bg-black text-white;
+  font-feature-settings: "rlig" 1, "calt" 1;
+}
+
+/* Styles spécifiques pour mobile */
+@media (max-width: 640px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+/* Styles pour les cartes de jeux */
+.game-card {
+  @apply relative overflow-hidden rounded-lg border border-gray-700 bg-gray-900 transition-all duration-300 hover:shadow-lg;
+  height: 100%;
+}
+
+.game-card:hover {
+  transform: translateY(-4px);
+}
+
+.game-card-image {
+  @apply w-full h-40 object-cover;
+}
+
+.game-card-content {
+  @apply p-4;
+}
+
+.game-card-title {
+  @apply text-lg font-semibold line-clamp-1;
+}
+
+.game-card-platforms {
+  @apply text-sm text-gray-400 mt-1 line-clamp-1;
+}
+
+.game-card-status {
+  @apply mt-2 text-xs inline-flex items-center px-2.5 py-0.5 rounded-full;
+}
+
+.status-backlog {
+  @apply bg-blue-900 text-blue-100;
+}
+
+.status-playing {
+  @apply bg-green-900 text-green-100;
+}
+
+.status-completed {
+  @apply bg-purple-900 text-purple-100;
+}
+
+/* Styles pour les filtres */
+.filter-chip {
+  @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium mr-2 mb-2 cursor-pointer transition-colors;
+}
+
+.filter-chip-active {
+  @apply bg-blue-600 text-white;
+}
+
+.filter-chip-inactive {
+  @apply bg-gray-700 text-gray-200 hover:bg-gray-600;
+}
+
+/* Styles pour la bannière d'installation PWA */
+.install-banner {
+  @apply fixed bottom-16 left-4 right-4 bg-blue-600 text-white p-4 rounded-lg shadow-lg flex items-center justify-between z-50;
+}
+
+.install-button {
+  @apply bg-white text-blue-600 px-4 py-2 rounded font-medium hover:bg-gray-100 transition-colors;
+}
+
+/* Animations pour les graphiques */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.chart-container {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Styles pour les KPI cards */
+.kpi-card {
+  @apply bg-gray-800 rounded-lg p-6 border border-gray-700;
+}
+
+.kpi-value {
+  @apply text-3xl font-bold text-white;
+}
+
+.kpi-label {
+  @apply text-sm text-gray-400 mt-1;
+}
+
+.kpi-change {
+  @apply text-xs mt-2 flex items-center;
+}
+
+.kpi-change.positive {
+  @apply text-green-400;
+}
+
+.kpi-change.negative {
+  @apply text-red-400;
+}
+
+/* Responsive grid pour les cartes de jeux */
+.games-grid {
+  @apply grid gap-4;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+@media (max-width: 640px) {
+  .games-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Styles pour les tooltips */
+.tooltip {
+  @apply absolute z-10 px-2 py-1 text-xs text-white bg-gray-900 rounded shadow-lg;
+}
+
+/* Styles pour les modales */
+.modal-overlay {
+  @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50;
+}
+
+.modal-content {
+  @apply bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4 border border-gray-700;
+}
+
+/* Styles pour les boutons */
+.btn-primary {
+  @apply bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors;
+}
+
+.btn-secondary {
+  @apply bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 transition-colors;
+}
+
+.btn-danger {
+  @apply bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition-colors;
+}
