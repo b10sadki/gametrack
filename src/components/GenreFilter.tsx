@@ -46,7 +46,7 @@ const GenreFilter: React.FC<GenreFilterProps> = ({
           <Button variant="outline" className="w-full justify-start">
             <Filter className="w-4 h-4 mr-2" />
             {selectedGenres.length > 0 
-              ? `${selectedGenres.length} genre(s) sélectionné(s)`
+              ? `${selectedGenres.length} genre(s) selectionne(s)`
               : 'Filter by genre'
             }
           </Button>
@@ -88,7 +88,7 @@ const GenreFilter: React.FC<GenreFilterProps> = ({
         </PopoverContent>
       </Popover>
 
-      {/* Affichage des genres sélectionnés */}
+      {/* Affichage des genres selectionnes */}
       {selectedGenres.length > 0 && (
         <div className="flex flex-wrap gap-1">
           {getSelectedGenreNames().map((genreName, index) => {

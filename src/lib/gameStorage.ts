@@ -27,12 +27,12 @@ export function getUserGames(): UserGame[] {
     }
     return JSON.parse(storedGames);
   } catch (error) {
-    console.error('Erreur lors de la récupération des jeux:', error);
+    console.error('Erreur lors de la recuperation des jeux:', error);
     return [];
   }
 }
 
-// Récupérer un jeu spécifique
+// Recuperer un jeu specifique
 export function getUserGame(gameId: number): UserGame | undefined {
   const games = getUserGames();
   return games.find(game => game.id === gameId);
@@ -44,7 +44,7 @@ export function saveUserGame(game: Game, status: GameStatus, additionalData?: Pa
     const games = getUserGames();
     const now = new Date().toISOString();
     
-    // Vérifier si le jeu existe déjà
+    // Verifier si le jeu existe dejà
     const existingIndex = games.findIndex(g => g.id === game.id);
     
     if (existingIndex >= 0) {
@@ -148,7 +148,7 @@ export function filterGamesByGenre(genreIds: number[]): UserGame[] {
   );
 }
 
-// Exporter les données en JSON
+// Exporter les donnees en JSON
 export function exportUserGames(): string {
   const games = getUserGames();
   const exportData = {
@@ -159,7 +159,7 @@ export function exportUserGames(): string {
   return JSON.stringify(exportData, null, 2);
 }
 
-// Importer les données depuis JSON
+// Importer les donnees depuis JSON
 export function importUserGames(jsonData: string): boolean {
   try {
     const data = JSON.parse(jsonData);

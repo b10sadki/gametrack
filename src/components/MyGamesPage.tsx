@@ -20,7 +20,7 @@ const MyGamesPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isMobile = useIsMobile();
   
-  // Rafraîchir la liste des jeux
+  // Rafraechir la liste des jeux
   const refreshGames = () => {
     let filteredGames = getUserGames();
     
@@ -66,7 +66,7 @@ const MyGamesPage: React.FC = () => {
     );
   };
   
-  // Mettre à jour la liste quand les filtres changent
+  // Mettre e jour la liste quand les filtres changent
   useEffect(() => {
     refreshGames();
   }, [currentStatus, selectedPlatforms, selectedGenres]);
@@ -111,7 +111,7 @@ const MyGamesPage: React.FC = () => {
     totalPlayTime: allGames.reduce((sum, g) => sum + (g.playTime || 0), 0)
   };
 
-  // Composant pour une carte de jeu avec swipe
+  // Netflix-style Game Card Component
   const GameCard: React.FC<{ game: UserGame }> = ({ game }) => {
     const swipeRef = useSwipeElement({
       onSwipeLeft: () => isMobile && handleRemoveGame(game.id),
@@ -121,17 +121,17 @@ const MyGamesPage: React.FC = () => {
 
     const getStatusColor = (status: GameStatus) => {
       switch (status) {
-        case 'completed': return 'text-green-400';
-        case 'playing': return 'text-blue-400';
-        case 'backlog': return 'text-yellow-400';
-        case 'wishlist': return 'text-purple-400';
-        default: return 'text-gray-400';
+        case 'completed': return 'bg-green-600';
+        case 'playing': return 'bg-blue-600';
+        case 'backlog': return 'bg-yellow-600';
+        case 'wishlist': return 'bg-purple-600';
+        default: return 'bg-gray-600';
       }
     };
 
     const getStatusIcon = (status: GameStatus) => {
       switch (status) {
-        case 'wishlist': return <Heart className="w-4 h-4" />;
+        case 'wishlist': return <Heart className="w-3 h-3" />;
         default: return null;
       }
     };
@@ -139,97 +139,99 @@ const MyGamesPage: React.FC = () => {
     return (
       <div
         ref={swipeRef as React.RefObject<HTMLDivElement>}
-        className="game-card bg-card rounded-lg overflow-hidden shadow-sm border relative group"
+        className="group relative cursor-pointer transition-transform duration-300 hover:scale-105"
+        onClick={() => handleGameEdit(game)}
       >
-        {isMobile && (
-          <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
-            <div className="text-xs text-muted-foreground bg-background/80 px-2 py-1 rounded">
-              ? Remove | Edit ?
-            </div>
-          </div>
-        )}
-        
-        <div className="aspect-video relative overflow-hidden">
+        <div className="aspect-[2/3] relative overflow-hidden rounded-lg bg-gray-900">
           {game.background_image ? (
             <img 
               src={game.background_image} 
               alt={game.name}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
             />
           ) : (
-            <div className="w-full h-full bg-muted flex items-center justify-center">
-              <span className="text-muted-foreground">Pas d'image</span>
+            <div className="w-full h-full bg-gray-800 flex items-center justify-center">
+              <span className="text-gray-500 text-sm">No Image</span>
             </div>
           )}
           
-          {/* Badge de statut */}
-          <div className="absolute top-2 left-2">
-            <Badge className={`${getStatusColor(game.status)} bg-background/80`}>
-              {getStatusIcon(game.status)}
-              {game.status === 'wishlist' ? 'Wishlist' :
-         game.status === 'backlog' ? 'To Play' :
-         game.status === 'playing' ? 'Playing' : 'Completed'}
-            </Badge>
+          {/* Hover Overlay */}
+          <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-70 transition-all duration-300 flex items-end">
+            <div className="p-4 w-full transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+              <h3 className="text-white font-semibold text-sm mb-2 line-clamp-2">{game.name}</h3>
+              
+              {/* Rating */}
+              {game.rating && (
+                <div className="flex items-center mb-2">
+                  <Star className="w-4 h-4 fill-yellow-400 text-yellow-400 mr-1" />
+                  <span className="text-white text-sm font-medium">{game.rating}/5</span>
+                </div>
+              )}
+              
+              {/* Play Time */}
+              {game.playTime && game.playTime > 0 && (
+                <div className="flex items-center mb-2">
+                  <Clock className="w-4 h-4 text-gray-300 mr-1" />
+                  <span className="text-gray-300 text-sm">{game.playTime}h played</span>
+                </div>
+              )}
+              
+              {/* Action Buttons */}
+              <div className="flex gap-2">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleGameEdit(game);
+                  }}
+                  className="bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-3 py-1 rounded text-sm transition-colors"
+                >
+                  <Edit className="w-3 h-3 mr-1 inline" />
+                  Edit
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleRemoveGame(game.id);
+                  }}
+                  className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm transition-colors"
+                >
+                  <Trash2 className="w-3 h-3 mr-1 inline" />
+                  Remove
+                </button>
+              </div>
+            </div>
           </div>
           
-          {/* Note for completed games */}
+          {/* Status Badge */}
+          <div className="absolute top-2 left-2">
+            <div className={`px-2 py-1 rounded text-xs font-semibold text-white ${getStatusColor(game.status)}`}>
+              {getStatusIcon(game.status)}
+              <span className={getStatusIcon(game.status) ? 'ml-1' : ''}>
+                {game.status === 'wishlist' ? 'Wishlist' :
+                 game.status === 'backlog' ? 'To Play' :
+                 game.status === 'playing' ? 'Playing' : 'Completed'}
+              </span>
+            </div>
+          </div>
+          
+          {/* Rating Badge for completed games */}
           {game.status === 'completed' && game.rating && (
             <div className="absolute top-2 right-2">
-              <div className="flex items-center gap-1 bg-background/80 px-2 py-1 rounded">
-                <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-                <span className="text-xs font-medium">{game.rating}</span>
+              <div className="bg-black bg-opacity-60 px-2 py-1 rounded flex items-center">
+                <Star className="w-3 h-3 fill-yellow-400 text-yellow-400 mr-1" />
+                <span className="text-white text-xs font-medium">{game.rating}</span>
               </div>
             </div>
           )}
-        </div>
-        
-        <div className="p-3">
-          <h3 className="font-medium text-sm mb-2 line-clamp-2">{game.name}</h3>
           
-          <div className="space-y-2">
-            {/* Temps de jeu */}
-            {game.playTime && game.playTime > 0 && (
-              <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                <Clock className="w-3 h-3" />
-                <span>{game.playTime}h</span>
+          {/* Mobile Swipe Indicator */}
+          {isMobile && (
+            <div className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+              <div className="text-xs text-white bg-black bg-opacity-60 px-2 py-1 rounded">
+                ? Remove | Edit ?
               </div>
-            )}
-            
-            {/* Genres */}
-            <div className="flex flex-wrap gap-1">
-              {game.genres.slice(0, 2).map(genre => (
-                <Badge key={genre.id} variant="outline" className="text-xs">
-                  {genre.name}
-                </Badge>
-              ))}
-              {game.genres.length > 2 && (
-                <Badge variant="outline" className="text-xs">
-                  +{game.genres.length - 2}
-                </Badge>
-              )}
             </div>
-            
-            {/* Actions */}
-            <div className="flex gap-1 pt-2">
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => handleGameEdit(game)}
-                className="flex-1 h-8"
-              >
-                <Edit className="w-3 h-3 mr-1" />
-                Edit
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => handleRemoveGame(game.id)}
-                className="h-8 px-2 text-destructive hover:text-destructive"
-              >
-                <Trash2 className="w-3 h-3" />
-              </Button>
-            </div>
-          </div>
+          )}
         </div>
       </div>
     );
@@ -263,7 +265,7 @@ const MyGamesPage: React.FC = () => {
         </div>
       </div>
       
-      {/* Statistiques supplémentaires */}
+      {/* Statistiques supplementaires */}
       {(stats.averageRating > 0 || stats.totalPlayTime > 0) && (
         <div className="grid grid-cols-2 gap-2 mb-6">
           {stats.averageRating > 0 && (
@@ -359,7 +361,7 @@ const MyGamesPage: React.FC = () => {
       {isMobile && games.length > 0 && (
         <div className="bg-muted/50 p-3 rounded-lg mb-4">
           <p className="text-sm text-muted-foreground text-center">
-            ?? Swipe left to remove, right to edit
+            ? Swipe left to remove, right to edit
           </p>
         </div>
       )}
@@ -387,7 +389,7 @@ const MyGamesPage: React.FC = () => {
         </div>
       )}
       
-      {/* Modal de détails du jeu */}
+      {/* Modal de details du jeu */}
       {selectedGame && (
         <GameDetailsModal
           game={selectedGame}

@@ -12,13 +12,13 @@ import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 // Composant Dashboard pour afficher les KPI
 const DashboardPage: React.FC = () => {
   const [games, setGames] = useState(getUserGames());
-  // Utiliser un effet pour mettre ‡ jour les jeux si nÈcessaire
+  // Utiliser un effet pour mettre ù jour les jeux si nùcessaire
   useEffect(() => {
     const updateGames = () => {
       setGames(getUserGames());
     };
     
-    // …couter les changements potentiels dans le stockage local
+    // ùcouter les changements potentiels dans le stockage local
     window.addEventListener('storage', updateGames);
     return () => {
       window.removeEventListener('storage', updateGames);
@@ -38,7 +38,7 @@ const DashboardPage: React.FC = () => {
     ]
   };
   
-  // Fonction pour obtenir les jeux filtrÈs
+  // Fonction pour obtenir les jeux filtrùs
   const getFilteredGames = () => {
     let filtered = games;
     
@@ -57,10 +57,10 @@ const DashboardPage: React.FC = () => {
     return filtered;
   };
   
-  // Statistiques gÈnÈrales
+  // Statistiques gùnùrales
   const stats = getUserGameStats();
   
-  // Statistiques supplÈmentaires
+  // Statistiques supplùmentaires
   const additionalStats = {
     averageRating: stats.averageRating,
     totalPlayTime: stats.totalPlayTime,
@@ -122,7 +122,7 @@ const DashboardPage: React.FC = () => {
   // Prepare data for line chart (timeline evolution)
   const prepareTimelineData = () => {
     // Simulate evolution data (to be replaced with real data)
-    // Dans une version rÈelle, ces donnÈes seraient stockÈes avec des timestamps
+    // Dans une version rùelle, ces donnùes seraient stockùes avec des timestamps
     return [
       { month: 'Jan', total: 10, backlog: 7, playing: 2, completed: 1 },
     { month: 'Feb', total: 15, backlog: 10, playing: 3, completed: 2 },
@@ -137,7 +137,7 @@ const DashboardPage: React.FC = () => {
     ];
   };
   
-  // Calculer le temps estimÈ pour terminer le backlog
+  // Calculer le temps estimù pour terminer le backlog
   const calculateBacklogTime = () => {
     const backlogGames = games.filter(g => g.status === 'backlog').length;
     // Average estimation of 20 hours per game (to be refined with RAWG data)
@@ -167,271 +167,371 @@ const DashboardPage: React.FC = () => {
     );
   };
   
-  // DonnÈes pour les graphiques
+  // Donnùes pour les graphiques
   const statusData = prepareStatusData();
   const platformData = preparePlatformData();
   const timelineData = prepareTimelineData();
   
   return (
-    <div className="container mx-auto px-4 py-6">
-      <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
-      
-      {/* KPI Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total</CardTitle>
-            <Gamepad2 className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.total}</div>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Souhaits</CardTitle>
-            <Heart className="h-4 w-4 text-purple-400" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-purple-400">{stats.wishlist}</div>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">To Play</CardTitle>
-            <Clock className="h-4 w-4 text-yellow-400" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-yellow-400">{stats.backlog}</div>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Playing</CardTitle>
-            <TrendingUp className="h-4 w-4 text-blue-400" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-blue-400">{stats.playing}</div>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Completed</CardTitle>
-            <Trophy className="h-4 w-4 text-green-400" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-green-400">{stats.completed}</div>
-          </CardContent>
-        </Card>
-        
-        {additionalStats.averageRating > 0 && (
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Note moyenne</CardTitle>
-              <Star className="h-4 w-4 text-yellow-400" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-yellow-400">
-                {additionalStats.averageRating.toFixed(1)}
-              </div>
-              <p className="text-xs text-muted-foreground">
-                {additionalStats.ratedGamesCount} jeu{additionalStats.ratedGamesCount > 1 ? 'x' : ''} notÈ{additionalStats.ratedGamesCount > 1 ? 's' : ''}
-              </p>
-            </CardContent>
-          </Card>
-        )}
-      </div>
-      
-      {/* Statistiques supplÈmentaires */}
-      {(additionalStats.totalPlayTime > 0 || additionalStats.gamesWithNotes > 0) && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-          {additionalStats.totalPlayTime > 0 && (
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Total play time</CardTitle>
-                <Clock className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{additionalStats.totalPlayTime}h</div>
-                <p className="text-xs text-muted-foreground">
-                  Average: {(additionalStats.totalPlayTime / Math.max(stats.total - stats.wishlist, 1)).toFixed(1)}h per game
-                </p>
-              </CardContent>
-            </Card>
-          )}
+    <div className="min-h-screen bg-black text-white">
+      {/* Hero Section */}
+      <div className="relative bg-gradient-to-r from-red-900 via-black to-black py-16 px-8">
+        <div className="max-w-7xl mx-auto">
+          <h1 className="text-5xl font-bold mb-4">Tableau de bord</h1>
+          <p className="text-xl text-gray-300 mb-8">Decouvrez vos statistiques de jeu et suivez vos progrËs</p>
           
-          {additionalStats.gamesWithNotes > 0 && (
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Jeux avec notes</CardTitle>
-                <Trophy className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{additionalStats.gamesWithNotes}</div>
-                <p className="text-xs text-muted-foreground">
-                  {((additionalStats.gamesWithNotes / stats.total) * 100).toFixed(1)}% de votre collection
-                </p>
-              </CardContent>
-            </Card>
-          )}
-        </div>
-      )}
-      
-      {/* Temps estimÈ pour terminer le backlog */}
-      <div className="bg-gray-900 p-4 rounded-lg mb-6">
-        <h2 className="text-lg font-semibold mb-2">Temps estimÈ pour terminer votre backlog</h2>
-        <div className="text-3xl font-bold text-blue-400">{calculateBacklogTime()}</div>
-        <div className="text-xs text-gray-400 mt-1">
-          Based on an average estimation of 20 hours per game
-        </div>
-      </div>
-      
-      {/* Filtres */}
-      <div className="mb-6">
-        <h2 className="text-lg font-semibold mb-2">Filtres</h2>
-        
-        {/* Status filters */}
-        <div className="tabs mb-4">
-          <button 
-            className={`tab ${selectedStatus === 'all' ? 'tab-active' : 'tab-inactive'}`}
-            onClick={() => handleStatusChange('all')}
-          >
-            Tous
-          </button>
-          <button 
-            className={`tab ${selectedStatus === 'backlog' ? 'tab-active' : 'tab-inactive'}`}
-            onClick={() => handleStatusChange('backlog')}
-          >
-            To Play
-          </button>
-          <button 
-            className={`tab ${selectedStatus === 'playing' ? 'tab-active' : 'tab-inactive'}`}
-            onClick={() => handleStatusChange('playing')}
-          >
-            Playing
-          </button>
-          <button 
-            className={`tab ${selectedStatus === 'completed' ? 'tab-active' : 'tab-inactive'}`}
-            onClick={() => handleStatusChange('completed')}
-          >
-            Completed
-          </button>
-        </div>
-        
-        {/* Platform filters */}
-        <div className="overflow-x-auto">
-          <div className="flex flex-wrap">
-            {Object.entries(PLATFORMS).map(([name, id]) => (
-              <div
-                key={id}
-                className={`filter-chip ${selectedPlatforms.includes(id) ? 'filter-chip-active' : 'filter-chip-inactive'}`}
-                onClick={() => togglePlatform(id)}
-              >
-                {name}
+          {/* Quick Stats */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="bg-black/50 backdrop-blur-sm rounded-lg p-6 border border-gray-800">
+              <div className="flex items-center justify-between mb-2">
+                <Gamepad2 className="h-8 w-8 text-red-500" />
+                <span className="text-3xl font-bold">{stats.total}</span>
               </div>
-            ))}
+              <p className="text-gray-400">Total des jeux</p>
+            </div>
+            
+            <div className="bg-black/50 backdrop-blur-sm rounded-lg p-6 border border-gray-800">
+              <div className="flex items-center justify-between mb-2">
+                <Trophy className="h-8 w-8 text-green-500" />
+                <span className="text-3xl font-bold">{stats.completed}</span>
+              </div>
+              <p className="text-gray-400">Termines</p>
+            </div>
+            
+            <div className="bg-black/50 backdrop-blur-sm rounded-lg p-6 border border-gray-800">
+              <div className="flex items-center justify-between mb-2">
+                <TrendingUp className="h-8 w-8 text-blue-500" />
+                <span className="text-3xl font-bold">{stats.playing}</span>
+              </div>
+              <p className="text-gray-400">En cours</p>
+            </div>
+            
+            <div className="bg-black/50 backdrop-blur-sm rounded-lg p-6 border border-gray-800">
+              <div className="flex items-center justify-between mb-2">
+                <Clock className="h-8 w-8 text-yellow-500" />
+                <span className="text-3xl font-bold">{stats.backlog}</span>
+              </div>
+              <p className="text-gray-400">¿ jouer</p>
+            </div>
           </div>
         </div>
       </div>
       
-      {/* Donut chart - Distribution by status */}
-      <div className="bg-gray-900 p-4 rounded-lg mb-6">
-        <h2 className="text-lg font-semibold mb-4">Distribution by status</h2>
-        <div className="h-64">
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={statusData}
-                cx="50%"
-                cy="50%"
-                innerRadius={60}
-                outerRadius={80}
-                paddingAngle={5}
-                dataKey="value"
-                label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+      <div className="max-w-7xl mx-auto px-8 py-12">
+        {/* Detailed Stats */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-12">
+            <div className="bg-gray-900/50 backdrop-blur-sm rounded-lg p-6 border border-gray-800">
+              <div className="flex items-center justify-between mb-2">
+                <Gamepad2 className="h-6 w-6 text-gray-400" />
+                <span className="text-sm text-gray-400">Total</span>
+              </div>
+              <div className="text-2xl font-bold">{stats.total}</div>
+            </div>
+            
+            <div className="bg-gray-900/50 backdrop-blur-sm rounded-lg p-6 border border-gray-800">
+              <div className="flex items-center justify-between mb-2">
+                <Heart className="h-6 w-6 text-purple-400" />
+                <span className="text-sm text-gray-400">Souhaits</span>
+              </div>
+              <div className="text-2xl font-bold text-purple-400">{stats.wishlist}</div>
+            </div>
+            
+            <div className="bg-gray-900/50 backdrop-blur-sm rounded-lg p-6 border border-gray-800">
+              <div className="flex items-center justify-between mb-2">
+                <Clock className="h-6 w-6 text-yellow-400" />
+                <span className="text-sm text-gray-400">¿ jouer</span>
+              </div>
+              <div className="text-2xl font-bold text-yellow-400">{stats.backlog}</div>
+            </div>
+            
+            <div className="bg-gray-900/50 backdrop-blur-sm rounded-lg p-6 border border-gray-800">
+              <div className="flex items-center justify-between mb-2">
+                <TrendingUp className="h-6 w-6 text-blue-400" />
+                <span className="text-sm text-gray-400">En cours</span>
+              </div>
+              <div className="text-2xl font-bold text-blue-400">{stats.playing}</div>
+            </div>
+            
+            <div className="bg-gray-900/50 backdrop-blur-sm rounded-lg p-6 border border-gray-800">
+              <div className="flex items-center justify-between mb-2">
+                <Trophy className="h-6 w-6 text-green-400" />
+                <span className="text-sm text-gray-400">Termines</span>
+              </div>
+              <div className="text-2xl font-bold text-green-400">{stats.completed}</div>
+            </div>
+            
+            {additionalStats.averageRating > 0 && (
+              <div className="bg-gray-900/50 backdrop-blur-sm rounded-lg p-6 border border-gray-800">
+                <div className="flex items-center justify-between mb-2">
+                  <Star className="h-6 w-6 text-yellow-400" />
+                  <span className="text-sm text-gray-400">Note moyenne</span>
+                </div>
+                <div className="text-2xl font-bold text-yellow-400">
+                  {additionalStats.averageRating.toFixed(1)}
+                </div>
+                <p className="text-xs text-gray-500 mt-1">
+                  {additionalStats.ratedGamesCount} jeu{additionalStats.ratedGamesCount > 1 ? 'x' : ''} note{additionalStats.ratedGamesCount > 1 ? 's' : ''}
+                </p>
+              </div>
+            )}
+      </div>
+      
+        {/* Additional Stats */}
+        {(additionalStats.totalPlayTime > 0 || additionalStats.gamesWithNotes > 0) && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+            {additionalStats.totalPlayTime > 0 && (
+              <div className="bg-gray-900/50 backdrop-blur-sm rounded-lg p-8 border border-gray-800">
+                <div className="flex items-center mb-4">
+                  <Clock className="h-8 w-8 text-blue-400 mr-3" />
+                  <h3 className="text-xl font-semibold">Temps de jeu total</h3>
+                </div>
+                <div className="text-4xl font-bold text-blue-400 mb-2">{additionalStats.totalPlayTime}h</div>
+                <p className="text-gray-400">
+                  Moyenne: {(additionalStats.totalPlayTime / Math.max(stats.total - stats.wishlist, 1)).toFixed(1)}h par jeu
+                </p>
+              </div>
+            )}
+            
+            {additionalStats.gamesWithNotes > 0 && (
+              <div className="bg-gray-900/50 backdrop-blur-sm rounded-lg p-8 border border-gray-800">
+                <div className="flex items-center mb-4">
+                  <Trophy className="h-8 w-8 text-yellow-400 mr-3" />
+                  <h3 className="text-xl font-semibold">Jeux avec notes</h3>
+                </div>
+                <div className="text-4xl font-bold text-yellow-400 mb-2">{additionalStats.gamesWithNotes}</div>
+                <p className="text-gray-400">
+                  {((additionalStats.gamesWithNotes / stats.total) * 100).toFixed(1)}% de votre collection
+                </p>
+              </div>
+            )}
+          </div>
+        )}
+        
+        {/* Backlog Time Estimation */}
+        <div className="bg-gradient-to-r from-red-900/20 to-black/20 backdrop-blur-sm rounded-lg p-8 border border-red-800/30 mb-12">
+          <div className="flex items-center mb-4">
+            <Clock className="h-10 w-10 text-red-400 mr-4" />
+            <div>
+              <h2 className="text-2xl font-bold">Temps estime pour votre backlog</h2>
+              <p className="text-gray-400">Base sur une estimation moyenne de 20 heures par jeu</p>
+            </div>
+          </div>
+          <div className="text-5xl font-bold text-red-400">{calculateBacklogTime()}</div>
+        </div>
+      
+        {/* Filters */}
+        <div className="mb-12">
+          <h2 className="text-3xl font-bold mb-8">Filtres et analyses</h2>
+          
+          {/* Status filters */}
+          <div className="mb-8">
+            <h3 className="text-xl font-semibold mb-4 text-gray-300">Statut des jeux</h3>
+            <div className="flex flex-wrap gap-3">
+              <button 
+                className={`px-6 py-3 rounded-lg font-medium transition-all duration-200 ${
+                  selectedStatus === 'all' 
+                    ? 'bg-red-600 text-white shadow-lg shadow-red-600/25' 
+                    : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                }`}
+                onClick={() => handleStatusChange('all')}
               >
-                {statusData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
+                Tous
+              </button>
+              <button 
+                className={`px-6 py-3 rounded-lg font-medium transition-all duration-200 ${
+                  selectedStatus === 'backlog' 
+                    ? 'bg-red-600 text-white shadow-lg shadow-red-600/25' 
+                    : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                }`}
+                onClick={() => handleStatusChange('backlog')}
+              >
+                ¿ jouer
+              </button>
+              <button 
+                className={`px-6 py-3 rounded-lg font-medium transition-all duration-200 ${
+                  selectedStatus === 'playing' 
+                    ? 'bg-red-600 text-white shadow-lg shadow-red-600/25' 
+                    : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                }`}
+                onClick={() => handleStatusChange('playing')}
+              >
+                En cours
+              </button>
+              <button 
+                className={`px-6 py-3 rounded-lg font-medium transition-all duration-200 ${
+                  selectedStatus === 'completed' 
+                    ? 'bg-red-600 text-white shadow-lg shadow-red-600/25' 
+                    : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                }`}
+                onClick={() => handleStatusChange('completed')}
+              >
+                Termines
+              </button>
+            </div>
+          </div>
+          
+          {/* Platform filters */}
+          <div className="mb-8">
+            <h3 className="text-xl font-semibold mb-4 text-gray-300">Plateformes</h3>
+            <div className="flex flex-wrap gap-2">
+              {Object.entries(PLATFORMS).map(([name, id]) => (
+                <button
+                  key={id}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                    selectedPlatforms.includes(id)
+                      ? 'bg-red-600 text-white shadow-lg shadow-red-600/25'
+                      : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white'
+                  }`}
+                  onClick={() => togglePlatform(id)}
+                >
+                  {name}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
-      </div>
       
-      {/* Bar chart - Distribution by platform */}
-      <div className="bg-gray-900 p-4 rounded-lg mb-6">
-        <h2 className="text-lg font-semibold mb-4">Distribution by platform</h2>
-        <div className="h-64">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart
-              data={platformData}
-              margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-            >
-              <CartesianGrid strokeDasharray="3 3" stroke="#444" />
-              <XAxis dataKey="name" tick={{ fill: '#fff' }} />
-              <YAxis tick={{ fill: '#fff' }} />
-              <Tooltip 
-                contentStyle={{ backgroundColor: '#1F2937', borderColor: '#374151', color: '#fff' }}
-              />
-              <Bar dataKey="count" name="Nombre de jeux">
-                {platformData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
+        {/* Charts Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+          {/* Donut chart - Distribution by status */}
+          <div className="bg-gray-900/50 backdrop-blur-sm rounded-lg p-8 border border-gray-800">
+            <h3 className="text-2xl font-bold mb-6 text-gray-100">Distribution par statut</h3>
+            <div className="h-80">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={statusData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={70}
+                    outerRadius={120}
+                    paddingAngle={5}
+                    dataKey="value"
+                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                  >
+                    {statusData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: '#111827', 
+                      borderColor: '#374151', 
+                      color: '#fff',
+                      borderRadius: '8px',
+                      border: '1px solid #374151'
+                    }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+          
+          {/* Bar chart - Distribution by platform */}
+          <div className="bg-gray-900/50 backdrop-blur-sm rounded-lg p-8 border border-gray-800">
+            <h3 className="text-2xl font-bold mb-6 text-gray-100">Distribution par plateforme</h3>
+            <div className="h-80">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={platformData}
+                  margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                  <XAxis 
+                    dataKey="name" 
+                    tick={{ fill: '#D1D5DB', fontSize: 12 }}
+                    axisLine={{ stroke: '#374151' }}
+                  />
+                  <YAxis 
+                    tick={{ fill: '#D1D5DB', fontSize: 12 }}
+                    axisLine={{ stroke: '#374151' }}
+                  />
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: '#111827', 
+                      borderColor: '#374151', 
+                      color: '#fff',
+                      borderRadius: '8px',
+                      border: '1px solid #374151'
+                    }}
+                  />
+                  <Bar dataKey="count" name="Nombre de jeux" radius={[4, 4, 0, 0]}>
+                    {platformData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
         </div>
-      </div>
-      
-      {/* Graphique en ligne - …volution dans le temps */}
-      <div className="bg-gray-900 p-4 rounded-lg mb-6">
-        <h2 className="text-lg font-semibold mb-4">…volution de votre collection</h2>
-        <div className="h-64">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart
-              data={timelineData}
-              margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-            >
-              <CartesianGrid strokeDasharray="3 3" stroke="#444" />
-              <XAxis dataKey="month" tick={{ fill: '#fff' }} />
-              <YAxis tick={{ fill: '#fff' }} />
-              <Tooltip 
-                contentStyle={{ backgroundColor: '#1F2937', borderColor: '#374151', color: '#fff' }}
-              />
-              <Legend />
-              <Line 
-                type="monotone" 
-                dataKey="total" 
-                name="Total" 
-                stroke="#fff" 
-                activeDot={{ r: 8 }} 
-              />
-              <Line 
-                type="monotone" 
-                dataKey="backlog" 
-                name="To Play" 
-                stroke={COLORS.backlog} 
-              />
-              <Line 
-                type="monotone" 
-                dataKey="playing" 
-                name="Playing" 
-                stroke={COLORS.playing} 
-              />
-              <Line 
-                type="monotone" 
-                dataKey="completed" 
-                name="Completed" 
-                stroke={COLORS.completed} 
-              />
-            </LineChart>
-          </ResponsiveContainer>
+        
+        {/* Line chart - Evolution over time */}
+        <div className="bg-gray-900/50 backdrop-blur-sm rounded-lg p-8 border border-gray-800">
+          <h3 className="text-2xl font-bold mb-6 text-gray-100">evolution de votre collection</h3>
+          <div className="h-96">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart
+                data={timelineData}
+                margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                <XAxis 
+                  dataKey="month" 
+                  tick={{ fill: '#D1D5DB', fontSize: 12 }}
+                  axisLine={{ stroke: '#374151' }}
+                />
+                <YAxis 
+                  tick={{ fill: '#D1D5DB', fontSize: 12 }}
+                  axisLine={{ stroke: '#374151' }}
+                />
+                <Tooltip 
+                  contentStyle={{ 
+                    backgroundColor: '#111827', 
+                    borderColor: '#374151', 
+                    color: '#fff',
+                    borderRadius: '8px',
+                    border: '1px solid #374151'
+                  }}
+                />
+                <Legend 
+                  wrapperStyle={{ color: '#D1D5DB' }}
+                />
+                <Line 
+                  type="monotone" 
+                  dataKey="total" 
+                  name="Total" 
+                  stroke="#fff" 
+                  strokeWidth={3}
+                  activeDot={{ r: 6, fill: '#fff' }} 
+                />
+                <Line 
+                  type="monotone" 
+                  dataKey="backlog" 
+                  name="¿ jouer" 
+                  stroke={COLORS.backlog} 
+                  strokeWidth={2}
+                  activeDot={{ r: 5 }}
+                />
+                <Line 
+                  type="monotone" 
+                  dataKey="playing" 
+                  name="En cours" 
+                  stroke={COLORS.playing} 
+                  strokeWidth={2}
+                  activeDot={{ r: 5 }}
+                />
+                <Line 
+                  type="monotone" 
+                  dataKey="completed" 
+                  name="Termines" 
+                  stroke={COLORS.completed} 
+                  strokeWidth={2}
+                  activeDot={{ r: 5 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       </div>
     </div>

@@ -1,7 +1,7 @@
 // RAWG API for video game data retrieval
 // Uses the API key provided by the user
 
-// Clé API RAWG
+// Cle API RAWG
 const API_KEY = "2326583f87294eaeb9eba725e9af2777";
 const BASE_URL = "https://api.rawg.io/api";
 
@@ -26,7 +26,7 @@ export interface Game {
   metacritic: number | null;
   platforms: Platform[];
   genres: Genre[];
-  status?: string; // Ajouté localement
+  status?: string; // Ajoute localement
 }
 
 export interface Platform {
@@ -109,7 +109,7 @@ export async function getGameDetails(gameId: number): Promise<Game> {
     
     return await response.json();
   } catch (error) {
-    console.error(`Erreur lors de la récupération des détails du jeu ${gameId}:`, error);
+    console.error(`Erreur lors de la recuperation des details du jeu ${gameId}:`, error);
     throw error;
   }
 }

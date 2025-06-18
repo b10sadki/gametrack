@@ -48,14 +48,14 @@ const ExportImport: React.FC<ExportImportProps> = ({ onImportComplete }) => {
   const handleImport = () => {
     if (!importData.trim()) {
       setImportStatus('error');
-      setImportMessage('Veuillez coller des données JSON valides.');
+      setImportMessage('Veuillez coller des donnees JSON valides.');
       return;
     }
 
     const success = importUserGames(importData);
     if (success) {
       setImportStatus('success');
-      setImportMessage('Données importées avec succès!');
+      setImportMessage('Donnees importees avec succès!');
       setImportData('');
       onImportComplete?.();
       setTimeout(() => {
@@ -90,16 +90,16 @@ const ExportImport: React.FC<ExportImportProps> = ({ onImportComplete }) => {
           <DialogTrigger asChild>
             <Button onClick={handleExport} className="w-full">
               <Download className="w-4 h-4 mr-2" />
-              Exporter mes données
+              Exporter mes donnees
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-2xl">
             <DialogHeader>
-              <DialogTitle>Exporter vos données</DialogTitle>
+              <DialogTitle>Exporter vos donnees</DialogTitle>
             </DialogHeader>
             <div className="space-y-4">
               <div className="bg-muted p-4 rounded-lg">
-                <h4 className="font-medium mb-2">Résumé de vos données</h4>
+                <h4 className="font-medium mb-2">Resume de vos donnees</h4>
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>Total de jeux: {stats.total}</div>
                   <div>Completed games: {stats.completed}</div>
@@ -109,7 +109,7 @@ const ExportImport: React.FC<ExportImportProps> = ({ onImportComplete }) => {
               </div>
               
               <div className="space-y-2">
-                <label className="text-sm font-medium">Données JSON</label>
+                <label className="text-sm font-medium">Donnees JSON</label>
                 <Textarea
                   value={exportData}
                   readOnly
@@ -136,19 +136,19 @@ const ExportImport: React.FC<ExportImportProps> = ({ onImportComplete }) => {
           <DialogTrigger asChild>
             <Button variant="outline" className="w-full">
               <Upload className="w-4 h-4 mr-2" />
-              Importer des données
+              Importer des donnees
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-2xl">
             <DialogHeader>
-              <DialogTitle>Importer vos données</DialogTitle>
+              <DialogTitle>Importer vos donnees</DialogTitle>
             </DialogHeader>
             <div className="space-y-4">
               <Alert>
                 <AlertCircle className="h-4 w-4" />
                 <AlertDescription>
-                  ?? L'importation remplacera toutes vos données actuelles. 
-                  Assurez-vous d'avoir fait une sauvegarde au préalable.
+                  ?? L'importation remplacera toutes vos donnees actuelles. 
+                  Assurez-vous d'avoir fait une sauvegarde au prealable.
                 </AlertDescription>
               </Alert>
 
@@ -163,11 +163,11 @@ const ExportImport: React.FC<ExportImportProps> = ({ onImportComplete }) => {
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium">Ou coller les données JSON</label>
+                <label className="text-sm font-medium">Ou coller les donnees JSON</label>
                 <Textarea
                   value={importData}
                   onChange={(e) => setImportData(e.target.value)}
-                  placeholder="Collez ici vos données JSON exportées..."
+                  placeholder="Collez ici vos donnees JSON exportees..."
                   rows={8}
                   className="font-mono text-xs"
                 />
@@ -192,7 +192,7 @@ const ExportImport: React.FC<ExportImportProps> = ({ onImportComplete }) => {
                   disabled={!importData.trim() || importStatus === 'success'}
                   className="flex-1"
                 >
-                  Importer les données
+                  Importer les donnees
                 </Button>
                 <Button 
                   variant="outline" 

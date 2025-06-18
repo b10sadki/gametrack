@@ -80,7 +80,7 @@ const GameDetailsModal: React.FC<GameDetailsModalProps> = ({ game, isOpen, onClo
         ))}
         {rating > 0 && (
           <span className="ml-2 text-sm text-muted-foreground">
-            {rating}/5 étoiles
+            {rating}/5 etoiles
           </span>
         )}
       </div>

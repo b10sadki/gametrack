@@ -11,14 +11,14 @@ const App: React.FC = () => {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [showInstallBanner, setShowInstallBanner] = useState(false);
 
-  // Gérer l'événement d'installation PWA
+  // Gerer l'evenement d'installation PWA
   useEffect(() => {
     const handleBeforeInstallPrompt = (e: Event) => {
-      // Empêcher Chrome 67+ d'afficher automatiquement la bannière d'installation
+      // Empecher Chrome 67+ d'afficher automatiquement la banniere d'installation
       e.preventDefault();
       // Store the event to trigger it later
       setDeferredPrompt(e);
-      // Mettre à jour l'interface pour montrer le bouton d'installation
+      // Mettre e jour l'interface pour montrer le bouton d'installation
       setShowInstallBanner(true);
     };
 
@@ -35,10 +35,10 @@ const App: React.FC = () => {
       return;
     }
 
-    // Afficher la bannière d'installation
+    // Afficher la banniere d'installation
     deferredPrompt.prompt();
 
-    // Attendre la réponse de l'utilisateur
+    // Attendre la reponse de l'utilisateur
     deferredPrompt.userChoice.then((choiceResult: any) => {
       if (choiceResult.outcome === 'accepted') {
         console.log('User accepted the install prompt');
@@ -51,119 +51,128 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      {/* Bannière d'installation PWA */}
+    <div className="min-h-screen bg-black text-white">
+      {/* Netflix-style PWA Installation Banner */}
       {showInstallBanner && (
-        <div className="bg-primary text-primary-foreground p-3 text-center">
-          <span className="mr-4">Installer GameTracker pour une meilleure expérience !</span>
+        <div className="bg-gradient-to-r from-red-600 to-red-700 text-white p-3 text-center relative">
+          <span className="mr-4">Install GameTracker for the ultimate gaming experience!</span>
           <button
             onClick={handleInstallClick}
-            className="bg-white text-primary px-4 py-1 rounded hover:bg-gray-100 transition-colors mr-2"
+            className="bg-white text-red-600 px-4 py-1 rounded font-semibold hover:bg-gray-100 transition-colors mr-2"
           >
             <Download className="inline w-4 h-4 mr-1" />
-            Installer
+            Install
           </button>
           <button
             onClick={() => setShowInstallBanner(false)}
-            className="text-primary-foreground hover:text-gray-200 transition-colors"
+            className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300 transition-colors text-xl"
           >
             ?
           </button>
         </div>
       )}
 
-      {/* En-tête avec navigation */}
-      <header className="bg-card border-b border-border">
-        <div className="container mx-auto px-4">
+      {/* Netflix-style Header */}
+      <header className="bg-black bg-opacity-90 backdrop-blur-sm sticky top-0 z-50 border-b border-gray-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <h1 className="text-2xl font-bold text-primary">GameTracker</h1>
+            {/* Netflix-style Logo */}
+            <div className="flex items-center">
+              <h1 className="text-2xl font-bold text-red-600 tracking-tight">GAMETRACKER</h1>
+            </div>
             
-            {/* Navigation */}
-            <nav className="flex space-x-1">
+            {/* Netflix-style Navigation */}
+            <nav className="hidden md:flex space-x-8">
               <button
                 onClick={() => setActiveTab('search')}
-                className={`flex items-center px-4 py-2 rounded-lg transition-colors ${
+                className={`text-sm font-medium transition-colors duration-200 hover:text-gray-300 ${
                   activeTab === 'search'
-                    ? 'bg-primary text-primary-foreground'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                    ? 'text-white'
+                    : 'text-gray-400'
                 }`}
               >
-                <Search className="w-4 h-4 mr-2" />
-                <span className="hidden sm:inline">Recherche</span>
+                Browse
               </button>
               
               <button
                 onClick={() => setActiveTab('myGames')}
-                className={`flex items-center px-4 py-2 rounded-lg transition-colors ${
+                className={`text-sm font-medium transition-colors duration-200 hover:text-gray-300 ${
                   activeTab === 'myGames'
-                    ? 'bg-primary text-primary-foreground'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                    ? 'text-white'
+                    : 'text-gray-400'
                 }`}
               >
-                <Library className="w-4 h-4 mr-2" />
-                <span className="hidden sm:inline">Ma Collection</span>
+                My List
               </button>
               
               <button
                 onClick={() => setActiveTab('dashboard')}
-                className={`flex items-center px-4 py-2 rounded-lg transition-colors ${
+                className={`text-sm font-medium transition-colors duration-200 hover:text-gray-300 ${
                   activeTab === 'dashboard'
-                    ? 'bg-primary text-primary-foreground'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                    ? 'text-white'
+                    : 'text-gray-400'
                 }`}
               >
-                <BarChart3 className="w-4 h-4 mr-2" />
-                <span className="hidden sm:inline">Tableau de bord</span>
+                Dashboard
               </button>
             </nav>
+
+            {/* Mobile Menu Button */}
+            <div className="md:hidden">
+              <button className="text-white hover:text-gray-300">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       </header>
 
-      {/* Contenu principal */}
-      <main className="container mx-auto px-4 py-6">
+      {/* Main Content */}
+      <main className="min-h-screen bg-black">
         {activeTab === 'search' && <SearchPage />}
         {activeTab === 'myGames' && <MyGamesPage />}
         {activeTab === 'dashboard' && <DashboardPage />}
       </main>
 
-      {/* Navigation mobile en bas */}
-      <div className="fixed bottom-0 left-0 right-0 bg-card border-t border-border sm:hidden">
+      {/* Mobile Navigation */}
+      <div className="fixed bottom-0 left-0 right-0 bg-black bg-opacity-95 backdrop-blur-sm border-t border-gray-800 md:hidden">
         <div className="flex justify-around py-2">
           <button
             onClick={() => setActiveTab('search')}
-            className={`flex flex-col items-center px-4 py-2 ${
+            className={`flex flex-col items-center px-4 py-2 transition-colors ${
               activeTab === 'search'
-                ? 'text-primary'
-                : 'text-muted-foreground'
+                ? 'text-red-600'
+                : 'text-gray-400'
             }`}
           >
             <Search className="w-5 h-5" />
-            <span className="text-xs mt-1">Recherche</span>
+            <span className="text-xs mt-1">Browse</span>
           </button>
           
           <button
             onClick={() => setActiveTab('myGames')}
-            className={`flex flex-col items-center px-4 py-2 ${
+            className={`flex flex-col items-center px-4 py-2 transition-colors ${
               activeTab === 'myGames'
-                ? 'text-primary'
-                : 'text-muted-foreground'
+                ? 'text-red-600'
+                : 'text-gray-400'
             }`}
           >
             <Library className="w-5 h-5" />
-            <span className="text-xs mt-1">Collection</span>
+            <span className="text-xs mt-1">My List</span>
           </button>
           
           <button
             onClick={() => setActiveTab('dashboard')}
-            className={`flex flex-col items-center px-4 py-2 ${
+            className={`flex flex-col items-center px-4 py-2 transition-colors ${
               activeTab === 'dashboard'
-                ? 'text-primary'
-                : 'text-muted-foreground'
+                ? 'text-red-600'
+                : 'text-gray-400'
             }`}
           >
             <BarChart3 className="w-5 h-5" />
-            <span className="text-xs mt-1">Tableau</span>
+            <span className="text-xs mt-1">Dashboard</span>
           </button>
         </div>
       </div>

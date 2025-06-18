@@ -148,206 +148,202 @@ const SearchPage: React.FC = () => {
   }, [selectedPlatforms]);
 
   return (
-    <div className="container mx-auto px-4 py-6">
-      <h1 className="text-2xl font-bold mb-6">Search Games</h1>
-      
-      {/* Search bar */}
-      <div className="search-bar mb-6">
-        <span className="search-icon">??</span>
-        <input
-          type="text"
-          className="search-input"
-          placeholder="Search for a game..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-        />
-        <button 
-          className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-primary text-primary-foreground px-3 py-1 rounded-md"
-          onClick={handleSearch}
-        >
-          Search
-        </button>
-      </div>
-      
-      {/* Platform filters */}
-      <div className="mb-6 overflow-x-auto">
-        <h2 className="text-lg font-semibold mb-2">Platforms</h2>
-        <div className="flex flex-wrap">
-          {Object.entries(PLATFORMS).map(([name, id]) => (
-            <div
-              key={id}
-              className={`filter-chip ${selectedPlatforms.includes(id) ? 'filter-chip-active' : 'filter-chip-inactive'}`}
-              onClick={() => togglePlatform(id)}
-            >
-              {name}
-            </div>
-          ))}
-        </div>
-      </div>
-      
-      {/* Search results */}
-      {loading && games.length === 0 ? (
-        <div className="loading-spinner" />
-      ) : error ? (
-        <div className="error-message">{error}</div>
-      ) : games.length === 0 ? (
-        <div className="empty-message">
-          {query || selectedPlatforms.length > 0 
-            ? "No games found. Try different search terms or platforms."
-            : "Use the search bar or select a platform to find games."}
-        </div>
-      ) : (
-        <>
-          <p className="text-sm text-muted-foreground mb-4">
-            {totalCount} games found
-          </p>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {games.map(game => {
-              const status = getGameStatus(game.id);
-              return (
-                <div key={game.id} className="game-card bg-card rounded-lg overflow-hidden shadow-sm border">
-                  <div className="aspect-video relative overflow-hidden">
-                    {game.background_image ? (
-                      <img 
-                        src={game.background_image} 
-                        alt={game.name}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-full h-full bg-muted flex items-center justify-center">
-                        <span className="text-muted-foreground">No image</span>
-                      </div>
-                    )}
-                    
-                    {/* Status badge if already added */}
-                    {status && (
-                      <div className="absolute top-2 left-2">
-                        <Badge className={`${getStatusColor(status)} border-0`}>
-                          {getStatusIcon(status)}
-                          <span className="ml-1">{getStatusLabel(status)}</span>
-                        </Badge>
-                      </div>
-                    )}
-                    
-                    {/* RAWG Rating */}
-                    {game.metacritic && (
-                      <div className="absolute top-2 right-2">
-                        <div className="flex items-center gap-1 bg-background/80 px-2 py-1 rounded">
-                          <span className="text-xs font-medium">{game.metacritic}</span>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                  
-                  <div className="p-3">
-                    <h3 className="font-medium text-sm mb-2 line-clamp-2">{game.name}</h3>
-                    
-                    <div className="space-y-2">
-                      {/* Release date */}
-                      {game.released && (
-                        <p className="text-xs text-muted-foreground">
-                          Released: {new Date(game.released).toLocaleDateString()}
-                        </p>
-                      )}
-                      
-                      {/* Genres */}
-                      <div className="flex flex-wrap gap-1">
-                        {game.genres?.slice(0, 2).map(genre => (
-                          <Badge key={genre.id} variant="outline" className="text-xs">
-                            {genre.name}
-                          </Badge>
-                        ))}
-                        {(game.genres?.length || 0) > 2 && (
-                          <Badge variant="outline" className="text-xs">
-                            +{(game.genres?.length || 0) - 2}
-                          </Badge>
-                        )}
-                      </div>
-                      
-                      {/* Platforms */}
-                      <div className="flex flex-wrap gap-1">
-                        {game.platforms?.slice(0, 3).map(platform => (
-                          <Badge key={platform.platform.id} variant="secondary" className="text-xs">
-                            {platform.platform.name}
-                          </Badge>
-                        ))}
-                        {(game.platforms?.length || 0) > 3 && (
-                          <Badge variant="secondary" className="text-xs">
-                            +{(game.platforms?.length || 0) - 3}
-                          </Badge>
-                        )}
-                      </div>
-                      
-                      {/* Actions */}
-                      <div className="pt-2">
-                        {status ? (
-                          <div className="flex items-center justify-center gap-1 text-sm text-muted-foreground">
-                            <Check className="w-4 h-4" />
-                            <span className="text-center">Already in your collection</span>
-                          </div>
-                        ) : (
-                          <div className="grid grid-cols-2 gap-1">
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => addToUserGames(game, 'wishlist')}
-                              className="h-8 text-xs px-2 flex items-center justify-center"
-                            >
-                              <Heart className="w-3 h-3 mr-1 flex-shrink-0" />
-                              <span className="truncate">Wishlist</span>
-                            </Button>
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => addToUserGames(game, 'backlog')}
-                              className="h-8 text-xs px-2 flex items-center justify-center"
-                            >
-                              <Plus className="w-3 h-3 mr-1 flex-shrink-0" />
-                              <span className="truncate">To Play</span>
-                            </Button>
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => addToUserGames(game, 'playing')}
-                              className="h-8 text-xs px-2 flex items-center justify-center"
-                            >
-                              <Play className="w-3 h-3 mr-1 flex-shrink-0" />
-                              <span className="truncate">Playing</span>
-                            </Button>
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => addToUserGames(game, 'completed')}
-                              className="h-8 text-xs px-2 flex items-center justify-center"
-                            >
-                              <Trophy className="w-3 h-3 mr-1 flex-shrink-0" />
-                              <span className="truncate">Completed</span>
-                            </Button>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+    <div className="min-h-screen bg-black text-white">
+      {/* Netflix-style Hero Search Section */}
+      <div className="relative bg-gradient-to-b from-gray-900 to-black">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="text-center mb-8">
+            <h1 className="text-4xl md:text-6xl font-bold mb-4">Discover Games</h1>
+            <p className="text-xl text-gray-300 mb-8">Find your next gaming adventure</p>
           </div>
           
-          {games.length < totalCount && (
-            <div className="mt-8 text-center">
-              <Button
-                variant="outline"
-                onClick={loadMore}
+          {/* Netflix-style Search Bar */}
+          <div className="max-w-2xl mx-auto mb-8">
+            <div className="relative">
+              <input
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                placeholder="Search for games..."
+                className="w-full px-6 py-4 text-lg bg-black bg-opacity-50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent backdrop-blur-sm"
+              />
+              <button
+                onClick={handleSearch}
                 disabled={loading}
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-md font-semibold transition-colors disabled:opacity-50"
               >
-                {loading ? 'Loading...' : 'Load more'}
-              </Button>
+                {loading ? 'Searching...' : 'Search'}
+              </button>
             </div>
-          )}
-        </>
-      )}
+          </div>
+          
+          {/* Platform filters - Netflix style */}
+          <div className="max-w-4xl mx-auto">
+            <h3 className="text-lg font-semibold mb-4 text-center">Filter by Platform</h3>
+            <div className="flex flex-wrap justify-center gap-3">
+              {Object.entries(PLATFORMS).map(([name, id]) => (
+                <button
+                  key={id}
+                  onClick={() => togglePlatform(id)}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                    selectedPlatforms.includes(id)
+                      ? 'bg-red-600 text-white shadow-lg transform scale-105'
+                      : 'bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white'
+                  }`}
+                >
+                  {name}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {/* Netflix-style Results Section */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {error && (
+          <div className="bg-red-900 bg-opacity-50 border border-red-600 text-red-200 px-6 py-4 rounded-lg mb-8">
+            <p className="font-semibold">Error</p>
+            <p>{error}</p>
+          </div>
+        )}
+
+        {loading && games.length === 0 && (
+          <div className="text-center py-16">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto"></div>
+            <p className="mt-4 text-gray-400 text-lg">Discovering amazing games...</p>
+          </div>
+        )}
+
+        {!loading && games.length === 0 && (query || selectedPlatforms.length > 0) && (
+          <div className="text-center py-16">
+            <p className="text-gray-400 text-xl">No games found. Try different search terms or platforms.</p>
+          </div>
+        )}
+
+        {!loading && games.length === 0 && !query && selectedPlatforms.length === 0 && (
+          <div className="text-center py-16">
+            <p className="text-gray-400 text-xl">Use the search bar or select a platform to find games.</p>
+          </div>
+        )}
+
+        {games.length > 0 && (
+          <>
+            <div className="mb-8">
+              <h2 className="text-2xl font-bold mb-2">Search Results</h2>
+              <p className="text-gray-400">
+                {totalCount} games found
+              </p>
+            </div>
+            
+            {/* Netflix-style Grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+              {games.map(game => {
+                const status = getGameStatus(game.id);
+                return (
+                  <div key={game.id} className="group relative cursor-pointer transition-transform duration-300 hover:scale-105">
+                    <div className="aspect-[2/3] relative overflow-hidden rounded-lg bg-gray-900">
+                      {game.background_image ? (
+                        <img 
+                          src={game.background_image} 
+                          alt={game.name}
+                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gray-800 flex items-center justify-center">
+                          <span className="text-gray-500 text-sm">No Image</span>
+                        </div>
+                      )}
+                      
+                      {/* Overlay on hover */}
+                      <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-60 transition-all duration-300 flex items-end">
+                        <div className="p-4 w-full transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+                          <h3 className="text-white font-semibold text-sm mb-2 line-clamp-2">{game.name}</h3>
+                          
+                          {/* Rating */}
+                          {game.metacritic && (
+                            <div className="flex items-center mb-2">
+                              <span className="bg-green-600 text-white text-xs px-2 py-1 rounded font-bold">
+                                {game.metacritic}
+                              </span>
+                            </div>
+                          )}
+                          
+                          {/* Release Year */}
+                          {game.released && (
+                            <p className="text-gray-300 text-xs mb-2">
+                              {new Date(game.released).getFullYear()}
+                            </p>
+                          )}
+                          
+                          {/* Action Buttons */}
+                          {status ? (
+                            <div className="flex items-center gap-1 text-green-400 text-xs">
+                              <Check className="w-3 h-3" />
+                              <span>In Collection</span>
+                            </div>
+                          ) : (
+                            <div className="flex gap-1">
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  addToUserGames(game, 'wishlist');
+                                }}
+                                className="bg-red-600 hover:bg-red-700 text-white p-1 rounded transition-colors"
+                                title="Add to Wishlist"
+                              >
+                                <Heart className="w-3 h-3" />
+                              </button>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  addToUserGames(game, 'backlog');
+                                }}
+                                className="bg-gray-600 hover:bg-gray-700 text-white p-1 rounded transition-colors"
+                                title="Add to Backlog"
+                              >
+                                <Plus className="w-3 h-3" />
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      
+                      {/* Status badge */}
+                      {status && (
+                        <div className="absolute top-2 left-2">
+                          <div className={`px-2 py-1 rounded text-xs font-semibold ${
+                            status === 'completed' ? 'bg-green-600 text-white' :
+                            status === 'playing' ? 'bg-blue-600 text-white' :
+                            status === 'wishlist' ? 'bg-red-600 text-white' :
+                            'bg-yellow-600 text-white'
+                          }`}>
+                            {getStatusIcon(status)}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            
+            {/* Load More Button */}
+            {games.length < totalCount && (
+              <div className="mt-12 text-center">
+                <button
+                  onClick={loadMore}
+                  disabled={loading}
+                  className="bg-gray-800 hover:bg-gray-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors disabled:opacity-50"
+                >
+                  {loading ? 'Loading...' : 'Load More Games'}
+                </button>
+              </div>
+            )}
+          </>
+        )}
+      </div>
       
       {/* Game details modal */}
       {selectedGame && (
