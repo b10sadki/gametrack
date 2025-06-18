@@ -4,13 +4,15 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Textarea } from './ui/textarea';
 import { Alert, AlertDescription } from './ui/alert';
 import { Download, Upload, FileText, CheckCircle, AlertCircle } from 'lucide-react';
-import { exportUserGames, importUserGames, getUserGameStats } from '../lib/gameStorage';
+import { exportUserGames, importUserGames } from '../lib/gameStorage';
+import { useGameStorage } from '../hooks/useGameStorage';
 
 interface ExportImportProps {
   onImportComplete?: () => void;
 }
 
 const ExportImport: React.FC<ExportImportProps> = ({ onImportComplete }) => {
+  const { getStats } = useGameStorage();
   const [isExportOpen, setIsExportOpen] = useState(false);
   const [isImportOpen, setIsImportOpen] = useState(false);
   const [exportData, setExportData] = useState('');
@@ -55,7 +57,7 @@ const ExportImport: React.FC<ExportImportProps> = ({ onImportComplete }) => {
     const success = importUserGames(importData);
     if (success) {
       setImportStatus('success');
-      setImportMessage('Donnees importees avec succès!');
+      setImportMessage('Donnees importees avec succs!');
       setImportData('');
       onImportComplete?.();
       setTimeout(() => {
@@ -80,7 +82,7 @@ const ExportImport: React.FC<ExportImportProps> = ({ onImportComplete }) => {
     }
   };
 
-  const stats = getUserGameStats();
+  const stats = getStats();
 
   return (
     <div className="space-y-4">

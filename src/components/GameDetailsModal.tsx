@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from './ui/dialog';
-import { Button } from './ui/button';
+
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Badge } from './ui/badge';
-import { Star, Clock, Calendar, Gamepad2 } from 'lucide-react';
+import { Star, Clock, Calendar } from 'lucide-react';
 import { Game } from '../lib/api';
-import { UserGame, GameStatus, updateUserGameData, saveUserGame } from '../lib/gameStorage';
+import { UserGame, GameStatus, updateUserGameData } from '../lib/gameStorage';
+import { useGameStorage } from '../hooks/useGameStorage';
 
 interface GameDetailsModalProps {
   game: Game | UserGame | null;
@@ -17,6 +18,7 @@ interface GameDetailsModalProps {
 }
 
 const GameDetailsModal: React.FC<GameDetailsModalProps> = ({ game, isOpen, onClose, onSave }) => {
+  const { saveGame } = useGameStorage();
   const [status, setStatus] = useState<GameStatus>('none');
   const [rating, setRating] = useState<number>(0);
   const [notes, setNotes] = useState<string>('');
@@ -42,7 +44,7 @@ const GameDetailsModal: React.FC<GameDetailsModalProps> = ({ game, isOpen, onClo
     if (!game) return;
 
     if ('status' in game) {
-      // Mise à jour d'un jeu existant
+      // Mise  jour d'un jeu existant
       updateUserGameData(game.id, {
         status,
         rating: rating > 0 ? rating : undefined,
@@ -51,7 +53,7 @@ const GameDetailsModal: React.FC<GameDetailsModalProps> = ({ game, isOpen, onClo
       });
     } else {
       // Ajout d'un nouveau jeu
-      saveUserGame(game, status, {
+      saveGame(game, status, {
         rating: rating > 0 ? rating : undefined,
         notes: notes.trim() || undefined,
         playTime: playTime > 0 ? playTime : undefined
@@ -87,25 +89,9 @@ const GameDetailsModal: React.FC<GameDetailsModalProps> = ({ game, isOpen, onClo
     );
   };
 
-  const getStatusColor = (gameStatus: GameStatus) => {
-    switch (gameStatus) {
-      case 'completed': return 'bg-green-500';
-      case 'playing': return 'bg-blue-500';
-      case 'backlog': return 'bg-yellow-500';
-      case 'wishlist': return 'bg-purple-500';
-      default: return 'bg-gray-500';
-    }
-  };
 
-  const getStatusLabel = (gameStatus: GameStatus) => {
-    switch (gameStatus) {
-      case 'completed': return 'Completed';
-    case 'playing': return 'Playing';
-    case 'backlog': return 'To Play';
-    case 'wishlist': return 'Wishlist';
-      default: return 'Not added';
-    }
-  };
+
+
 
   if (!game) return null;
 

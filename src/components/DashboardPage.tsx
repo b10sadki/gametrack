@@ -1,31 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
   BarChart, Bar, PieChart, Pie, LineChart, Line, 
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, 
   ResponsiveContainer, Cell
 } from 'recharts';
-import { getUserGames, GameStatus, getUserGameStats } from '../lib/gameStorage';
+import { GameStatus } from '../lib/gameStorage';
+import { useGameStorage } from '../hooks/useGameStorage';
 import { PLATFORMS } from '../lib/api';
 import { Star, Clock, Trophy, Heart, Gamepad2, TrendingUp } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+
+import MigrationBanner from './MigrationBanner';
 
 // Composant Dashboard pour afficher les KPI
 const DashboardPage: React.FC = () => {
-  const [games, setGames] = useState(getUserGames());
-  // Utiliser un effet pour mettre ù jour les jeux si nùcessaire
-  useEffect(() => {
-    const updateGames = () => {
-      setGames(getUserGames());
-    };
-    
-    // ùcouter les changements potentiels dans le stockage local
-    window.addEventListener('storage', updateGames);
-    return () => {
-      window.removeEventListener('storage', updateGames);
-    };
-  }, []);
+  const { games, getStats, migrationNeeded, migrateToFirebase } = useGameStorage();
   const [selectedPlatforms, setSelectedPlatforms] = useState<number[]>([]);
   const [selectedStatus, setSelectedStatus] = useState<GameStatus | 'all'>('all');
+  const [showMigrationBanner, setShowMigrationBanner] = useState(true);
   
   // Couleurs pour les graphiques
   const COLORS = {
@@ -58,7 +49,7 @@ const DashboardPage: React.FC = () => {
   };
   
   // Statistiques gùnùrales
-  const stats = getUserGameStats();
+  const stats = getStats();
   
   // Statistiques supplùmentaires
   const additionalStats = {
@@ -174,11 +165,21 @@ const DashboardPage: React.FC = () => {
   
   return (
     <div className="min-h-screen bg-black text-white">
+      {/* Migration Banner */}
+      {migrationNeeded && showMigrationBanner && (
+        <div className="max-w-7xl mx-auto px-8 pt-6">
+          <MigrationBanner
+            onMigrate={migrateToFirebase}
+            onDismiss={() => setShowMigrationBanner(false)}
+          />
+        </div>
+      )}
+      
       {/* Hero Section */}
       <div className="relative bg-gradient-to-r from-red-900 via-black to-black py-16 px-8">
         <div className="max-w-7xl mx-auto">
           <h1 className="text-5xl font-bold mb-4">Tableau de bord</h1>
-          <p className="text-xl text-gray-300 mb-8">Decouvrez vos statistiques de jeu et suivez vos progrËs</p>
+          <p className="text-xl text-gray-300 mb-8">Decouvrez vos statistiques de jeu et suivez vos progrùs</p>
           
           {/* Quick Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -211,7 +212,7 @@ const DashboardPage: React.FC = () => {
                 <Clock className="h-8 w-8 text-yellow-500" />
                 <span className="text-3xl font-bold">{stats.backlog}</span>
               </div>
-              <p className="text-gray-400">¿ jouer</p>
+              <p className="text-gray-400">ù jouer</p>
             </div>
           </div>
         </div>
@@ -239,7 +240,7 @@ const DashboardPage: React.FC = () => {
             <div className="bg-gray-900/50 backdrop-blur-sm rounded-lg p-6 border border-gray-800">
               <div className="flex items-center justify-between mb-2">
                 <Clock className="h-6 w-6 text-yellow-400" />
-                <span className="text-sm text-gray-400">¿ jouer</span>
+                <span className="text-sm text-gray-400">ù jouer</span>
               </div>
               <div className="text-2xl font-bold text-yellow-400">{stats.backlog}</div>
             </div>
@@ -345,7 +346,7 @@ const DashboardPage: React.FC = () => {
                 }`}
                 onClick={() => handleStatusChange('backlog')}
               >
-                ¿ jouer
+                ù jouer
               </button>
               <button 
                 className={`px-6 py-3 rounded-lg font-medium transition-all duration-200 ${
@@ -508,7 +509,7 @@ const DashboardPage: React.FC = () => {
                 <Line 
                   type="monotone" 
                   dataKey="backlog" 
-                  name="¿ jouer" 
+                  name="ù jouer" 
                   stroke={COLORS.backlog} 
                   strokeWidth={2}
                   activeDot={{ r: 5 }}

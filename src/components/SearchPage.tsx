@@ -1,25 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { searchGames, Game, PLATFORMS } from '../lib/api';
-import { saveUserGame, getUserGame, GameStatus, UserGame } from '../lib/gameStorage';
+import { GameStatus, UserGame } from '../lib/gameStorage';
+import { useGameStorage } from '../hooks/useGameStorage';
 import GameDetailsModal from './GameDetailsModal';
+import MigrationBanner from './MigrationBanner';
 import { Plus, Check, Heart, Clock, Play, Trophy } from 'lucide-react';
-import { Button } from './ui/button';
-import { Badge } from './ui/badge';
 
 // Game search component
 const SearchPage: React.FC = () => {
+  const { games: userGames, saveGame, migrationNeeded, migrateToFirebase } = useGameStorage();
   const [query, setQuery] = useState('');
   const [games, setGames] = useState<Game[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedPlatforms, setSelectedPlatforms] = useState<number[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
+
   const [selectedGame, setSelectedGame] = useState<Game | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [pendingStatus, setPendingStatus] = useState<GameStatus>('backlog');
   const [page, setPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
+  const [showMigrationBanner, setShowMigrationBanner] = useState(true);
 
   // Perform search
   const handleSearch = async () => {
@@ -89,7 +90,7 @@ const SearchPage: React.FC = () => {
   const addToUserGames = (game: Game, status: GameStatus) => {
     if (status === 'wishlist') {
       // For wishlist, add directly
-      saveUserGame(game, status);
+      saveGame(game, status);
     } else {
       // For other statuses, open modal for more details
       setSelectedGame(game);
@@ -106,7 +107,7 @@ const SearchPage: React.FC = () => {
 
   // Get the status of a game
   const getGameStatus = (gameId: number): GameStatus | null => {
-    const userGame = getUserGame(gameId);
+    const userGame = userGames.find(g => g.id === gameId);
     return userGame ? userGame.status : null;
   };
 
@@ -120,25 +121,7 @@ const SearchPage: React.FC = () => {
     }
   };
 
-  const getStatusColor = (status: GameStatus) => {
-    switch (status) {
-      case 'wishlist': return 'text-purple-400 bg-purple-500/20';
-      case 'backlog': return 'text-yellow-400 bg-yellow-500/20';
-      case 'playing': return 'text-blue-400 bg-blue-500/20';
-      case 'completed': return 'text-green-400 bg-green-500/20';
-      default: return 'text-gray-400 bg-gray-500/20';
-    }
-  };
 
-  const getStatusLabel = (status: GameStatus) => {
-    switch (status) {
-      case 'wishlist': return 'Wishlist';
-      case 'backlog': return 'To Play';
-      case 'playing': return 'Playing';
-      case 'completed': return 'Completed';
-      default: return status;
-    }
-  };
 
   // Perform search when platforms change
   useEffect(() => {
@@ -149,6 +132,16 @@ const SearchPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-black text-white">
+      {/* Migration Banner */}
+      {migrationNeeded && showMigrationBanner && (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+          <MigrationBanner
+            onMigrate={migrateToFirebase}
+            onDismiss={() => setShowMigrationBanner(false)}
+          />
+        </div>
+      )}
+      
       {/* Netflix-style Hero Search Section */}
       <div className="relative bg-gradient-to-b from-gray-900 to-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

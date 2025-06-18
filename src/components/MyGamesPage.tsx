@@ -1,28 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import { getUserGames, removeUserGame, GameStatus, UserGame, updateUserGameData } from '../lib/gameStorage';
+import { GameStatus, UserGame } from '../lib/gameStorage';
+import { useGameStorage } from '../hooks/useGameStorage';
 import { PLATFORMS, Genre } from '../lib/api';
 import { useSwipeElement } from '../hooks/use-swipe';
 import { useIsMobile } from '../hooks/use-mobile';
 import GameDetailsModal from './GameDetailsModal';
 import GenreFilter from './GenreFilter';
 import ExportImport from './ExportImport';
+import MigrationBanner from './MigrationBanner';
 import { Star, Clock, Trash2, Edit, Heart } from 'lucide-react';
-import { Button } from './ui/button';
-import { Badge } from './ui/badge';
+
+
 
 // Composant de liste des jeux de l'utilisateur
 const MyGamesPage: React.FC = () => {
-  const [games, setGames] = useState(getUserGames());
+  const { games: userGames, removeGame, migrationNeeded, migrateToFirebase } = useGameStorage();
+  const [games, setGames] = useState<UserGame[]>([]);
   const [currentStatus, setCurrentStatus] = useState<GameStatus | 'all'>('all');
   const [selectedPlatforms, setSelectedPlatforms] = useState<number[]>([]);
   const [selectedGenres, setSelectedGenres] = useState<number[]>([]);
   const [selectedGame, setSelectedGame] = useState<UserGame | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showMigrationBanner, setShowMigrationBanner] = useState(true);
   const isMobile = useIsMobile();
   
   // Rafraechir la liste des jeux
   const refreshGames = () => {
-    let filteredGames = getUserGames();
+    let filteredGames = [...userGames];
     
     // Filter by status
     if (currentStatus !== 'all') {
@@ -47,8 +51,8 @@ const MyGamesPage: React.FC = () => {
   };
   
   // Remove a game
-  const handleRemoveGame = (gameId: number) => {
-    removeUserGame(gameId);
+  const handleRemoveGame = async (gameId: number) => {
+    await removeGame(gameId);
     refreshGames();
   };
   
@@ -69,14 +73,13 @@ const MyGamesPage: React.FC = () => {
   // Mettre e jour la liste quand les filtres changent
   useEffect(() => {
     refreshGames();
-  }, [currentStatus, selectedPlatforms, selectedGenres]);
+  }, [currentStatus, selectedPlatforms, selectedGenres, userGames]);
 
   // Obtenir tous les genres disponibles
   const getAvailableGenres = (): Genre[] => {
-    const allGames = getUserGames();
     const genresMap = new Map<number, Genre>();
     
-    allGames.forEach(game => {
+    userGames.forEach(game => {
       game.genres.forEach(genre => {
         genresMap.set(genre.id, genre);
       });
@@ -95,20 +98,19 @@ const MyGamesPage: React.FC = () => {
   };
   
   // Statistiques
-  const allGames = getUserGames();
   const stats = {
-    total: allGames.length,
-    backlog: allGames.filter(g => g.status === 'backlog').length,
-    playing: allGames.filter(g => g.status === 'playing').length,
-    completed: allGames.filter(g => g.status === 'completed').length,
-    wishlist: allGames.filter(g => g.status === 'wishlist').length,
+    total: userGames.length,
+    backlog: userGames.filter(g => g.status === 'backlog').length,
+    playing: userGames.filter(g => g.status === 'playing').length,
+    completed: userGames.filter(g => g.status === 'completed').length,
+    wishlist: userGames.filter(g => g.status === 'wishlist').length,
     averageRating: (() => {
-      const ratedGames = allGames.filter(g => g.rating && g.rating > 0);
+      const ratedGames = userGames.filter(g => g.rating && g.rating > 0);
       return ratedGames.length > 0 
         ? ratedGames.reduce((sum, g) => sum + (g.rating || 0), 0) / ratedGames.length 
         : 0;
     })(),
-    totalPlayTime: allGames.reduce((sum, g) => sum + (g.playTime || 0), 0)
+    totalPlayTime: userGames.reduce((sum, g) => sum + (g.playTime || 0), 0)
   };
 
   // Netflix-style Game Card Component
@@ -239,6 +241,14 @@ const MyGamesPage: React.FC = () => {
   
   return (
     <div className="container mx-auto px-4 py-6">
+      {/* Migration Banner */}
+      {migrationNeeded && showMigrationBanner && (
+        <MigrationBanner
+          onMigrate={migrateToFirebase}
+          onDismiss={() => setShowMigrationBanner(false)}
+        />
+      )}
+      
       <h1 className="text-2xl font-bold mb-6">Ma liste de jeux</h1>
       
       {/* Statistiques */}

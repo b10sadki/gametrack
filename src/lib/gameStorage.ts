@@ -7,6 +7,7 @@ import { Game } from './api';
 export type GameStatus = 'backlog' | 'playing' | 'completed' | 'wishlist' | 'none';
 
 export interface UserGame extends Game {
+  userId?: string; // Firebase user ID
   status: GameStatus;
   dateAdded: string;
   lastModified: string;
@@ -44,7 +45,7 @@ export function saveUserGame(game: Game, status: GameStatus, additionalData?: Pa
     const games = getUserGames();
     const now = new Date().toISOString();
     
-    // Verifier si le jeu existe dejà
+    // Verifier si le jeu existe dej
     const existingIndex = games.findIndex(g => g.id === game.id);
     
     if (existingIndex >= 0) {

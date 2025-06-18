@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Library, BarChart3, Download } from 'lucide-react';
+import { Search, Library, BarChart3, Download, LogOut } from 'lucide-react';
 import SearchPage from './components/SearchPage';
 import MyGamesPage from './components/MyGamesPage';
 import DashboardPage from './components/DashboardPage';
+import LoginPage from './components/LoginPage';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 import './App.css';
 
 // Composant principal de l'application
-const App: React.FC = () => {
+const AppContent: React.FC = () => {
+  const { currentUser, logout } = useAuth();
   const [activeTab, setActiveTab] = useState<'search' | 'myGames' | 'dashboard'>('search');
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [showInstallBanner, setShowInstallBanner] = useState(false);
@@ -79,6 +82,20 @@ const App: React.FC = () => {
             {/* Netflix-style Logo */}
             <div className="flex items-center">
               <h1 className="text-2xl font-bold text-red-600 tracking-tight">GAMETRACKER</h1>
+            </div>
+            
+            {/* User Menu */}
+            <div className="flex items-center space-x-4">
+              <span className="text-sm text-gray-300 hidden sm:block">
+                {currentUser?.email}
+              </span>
+              <button
+                onClick={logout}
+                className="flex items-center space-x-2 text-gray-400 hover:text-white transition-colors"
+              >
+                <LogOut className="w-4 h-4" />
+                <span className="hidden sm:block">Logout</span>
+              </button>
             </div>
             
             {/* Netflix-style Navigation */}
@@ -178,6 +195,35 @@ const App: React.FC = () => {
       </div>
     </div>
   );
+};
+
+const App: React.FC = () => {
+  return (
+    <AuthProvider>
+      <AppWrapper />
+    </AuthProvider>
+  );
+};
+
+const AppWrapper: React.FC = () => {
+  const { currentUser, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-white">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!currentUser) {
+    return <LoginPage />;
+  }
+
+  return <AppContent />;
 };
 
 export default App;
