@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useAuth } from '../contexts/AuthContext';
-import { Eye, EyeOff, Mail, Lock, User, Chrome } from 'lucide-react';
+import { useAuth } from '../contexts/PocketBaseAuthContext';
+import { Eye, EyeOff, Mail, Lock, User } from 'lucide-react';
 
 export default function LoginPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -10,7 +10,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   
-  const { login, register, loginWithGoogle } = useAuth();
+  const { login, register } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,7 +21,7 @@ export default function LoginPage() {
       if (isLogin) {
         await login(email, password);
       } else {
-        await register(email, password);
+        await register(email, password, password);
       }
     } catch (error: any) {
       setError(error.message || 'Une erreur est survenue');
@@ -30,18 +30,7 @@ export default function LoginPage() {
     }
   };
 
-  const handleGoogleLogin = async () => {
-    setError('');
-    setLoading(true);
-    
-    try {
-      await loginWithGoogle();
-    } catch (error: any) {
-      setError(error.message || 'Erreur lors de la connexion avec Google');
-    } finally {
-      setLoading(false);
-    }
-  };
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center p-4">
@@ -134,22 +123,7 @@ export default function LoginPage() {
             </button>
           </form>
 
-          {/* Divider */}
-          <div className="flex items-center my-6">
-            <div className="flex-1 border-t border-gray-600"></div>
-            <span className="px-4 text-gray-400 text-sm">ou</span>
-            <div className="flex-1 border-t border-gray-600"></div>
-          </div>
 
-          {/* Google Login */}
-          <button
-            onClick={handleGoogleLogin}
-            disabled={loading}
-            className="w-full py-3 bg-white hover:bg-gray-100 disabled:bg-gray-300 text-gray-900 font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
-          >
-            <Chrome className="w-5 h-5" />
-            Continuer avec Google
-          </button>
 
           {/* Footer */}
           <div className="mt-6 text-center text-sm text-gray-400">
@@ -165,7 +139,7 @@ export default function LoginPage() {
               </>
             ) : (
               <>
-                DÈj‡ un compte ?{' '}
+                Dùjù un compte ?{' '}
                 <button
                   onClick={() => setIsLogin(true)}
                   className="text-red-400 hover:text-red-300 font-medium"

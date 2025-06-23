@@ -5,7 +5,7 @@ import { Textarea } from './ui/textarea';
 import { Alert, AlertDescription } from './ui/alert';
 import { Download, Upload, FileText, CheckCircle, AlertCircle } from 'lucide-react';
 import { exportUserGames, importUserGames } from '../lib/gameStorage';
-import { useGameStorage } from '../hooks/useGameStorage';
+import { useGameStorage } from '../hooks/usePocketBaseGameStorage';
 
 interface ExportImportProps {
   onImportComplete?: () => void;
@@ -57,7 +57,7 @@ const ExportImport: React.FC<ExportImportProps> = ({ onImportComplete }) => {
     const success = importUserGames(importData);
     if (success) {
       setImportStatus('success');
-      setImportMessage('Donnees importees avec succs!');
+      setImportMessage('Donnees importees avec succes!');
       setImportData('');
       onImportComplete?.();
       setTimeout(() => {

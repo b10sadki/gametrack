@@ -45,7 +45,7 @@ export function saveUserGame(game: Game, status: GameStatus, additionalData?: Pa
     const games = getUserGames();
     const now = new Date().toISOString();
     
-    // Verifier si le jeu existe dej
+    // Verifier si le jeu existe deja
     const existingIndex = games.findIndex(g => g.id === game.id);
     
     if (existingIndex >= 0) {

@@ -79,7 +79,7 @@ export async function searchGames(params: SearchParams): Promise<{ results: Game
     // Add filter for games since 2005
     url += '&dates=2005-01-01,2030-12-31';
     
-    // Effectuer la requête
+    // Effectuer la requte
     const response = await fetch(url);
     
     if (!response.ok) {

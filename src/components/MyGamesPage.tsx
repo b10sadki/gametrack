@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { GameStatus, UserGame } from '../lib/gameStorage';
-import { useGameStorage } from '../hooks/useGameStorage';
+import { useGameStorage } from '../hooks/usePocketBaseGameStorage';
 import { PLATFORMS, Genre } from '../lib/api';
 import { useSwipeElement } from '../hooks/use-swipe';
 import { useIsMobile } from '../hooks/use-mobile';

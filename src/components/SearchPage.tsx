@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { searchGames, Game, PLATFORMS } from '../lib/api';
 import { GameStatus, UserGame } from '../lib/gameStorage';
-import { useGameStorage } from '../hooks/useGameStorage';
+import { useGameStorage } from '../hooks/usePocketBaseGameStorage';
 import GameDetailsModal from './GameDetailsModal';
 import MigrationBanner from './MigrationBanner';
 import { Plus, Check, Heart, Clock, Play, Trophy } from 'lucide-react';

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../contexts/PocketBaseAuthContext';
 import { UserGame, GameStatus } from '../lib/gameStorage';
 import { Game } from '../lib/api';
 
@@ -25,7 +25,7 @@ import {
 } from '../lib/firebaseGameStorage';
 
 export function useGameStorage() {
-  const { currentUser } = useAuth();
+  const { user: currentUser } = useAuth();
   const [games, setGames] = useState<UserGame[]>([]);
   const [loading, setLoading] = useState(true);
   const [migrationNeeded, setMigrationNeeded] = useState(false);
@@ -45,7 +45,7 @@ export function useGameStorage() {
   useEffect(() => {
     if (!currentUser) return;
 
-    const unsubscribe = subscribeToUserGames(currentUser.uid, (firebaseGames) => {
+    const unsubscribe = subscribeToUserGames(currentUser.id, (firebaseGames) => {
       setGames(firebaseGames);
       setLoading(false);
     });
@@ -60,7 +60,7 @@ export function useGameStorage() {
     
     try {
       // Load from Firebase
-      const firebaseGames = await getFirebaseUserGames(currentUser.uid);
+      const firebaseGames = await getFirebaseUserGames(currentUser.id);
       
       // Check if we need to migrate from localStorage
       if (firebaseGames.length === 0) {
@@ -91,7 +91,7 @@ export function useGameStorage() {
       // Migrate each game to Firebase
       for (const game of localGames) {
         const { status, rating, notes, playTime, ...gameData } = game;
-        await saveFirebaseUserGame(currentUser.uid, gameData, status, {
+        await saveFirebaseUserGame(currentUser.id, gameData, status, {
           rating,
           notes,
           playTime
@@ -122,7 +122,7 @@ export function useGameStorage() {
     }
 
     try {
-      await saveFirebaseUserGame(currentUser.uid, game, status, additionalData);
+      await saveFirebaseUserGame(currentUser.id, game, status, additionalData);
     } catch (error) {
       console.error('Error saving game:', error);
       // Fallback to localStorage
@@ -137,7 +137,7 @@ export function useGameStorage() {
     }
 
     try {
-      await removeFirebaseUserGame(currentUser.uid, gameId);
+      await removeFirebaseUserGame(currentUser.id, gameId);
     } catch (error) {
       console.error('Error removing game:', error);
       removeLocalUserGame(gameId);
@@ -164,7 +164,7 @@ export function useGameStorage() {
     }
 
     try {
-      return await importFirebaseUserGames(currentUser.uid, jsonData);
+      return await importFirebaseUserGames(currentUser.id, jsonData);
     } catch (error) {
       console.error('Error importing games:', error);
       return false;

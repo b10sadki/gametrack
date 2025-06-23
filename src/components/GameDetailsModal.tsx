@@ -8,7 +8,7 @@ import { Badge } from './ui/badge';
 import { Star, Clock, Calendar } from 'lucide-react';
 import { Game } from '../lib/api';
 import { UserGame, GameStatus, updateUserGameData } from '../lib/gameStorage';
-import { useGameStorage } from '../hooks/useGameStorage';
+import { useGameStorage } from '../hooks/usePocketBaseGameStorage';
 
 interface GameDetailsModalProps {
   game: Game | UserGame | null;
@@ -44,7 +44,7 @@ const GameDetailsModal: React.FC<GameDetailsModalProps> = ({ game, isOpen, onClo
     if (!game) return;
 
     if ('status' in game) {
-      // Mise  jour d'un jeu existant
+      // Mise a jour d'un jeu existant
       updateUserGameData(game.id, {
         status,
         rating: rating > 0 ? rating : undefined,

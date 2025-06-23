@@ -5,7 +5,7 @@ import {
   ResponsiveContainer, Cell
 } from 'recharts';
 import { GameStatus } from '../lib/gameStorage';
-import { useGameStorage } from '../hooks/useGameStorage';
+import { useGameStorage } from '../hooks/usePocketBaseGameStorage';
 import { PLATFORMS } from '../lib/api';
 import { Star, Clock, Trophy, Heart, Gamepad2, TrendingUp } from 'lucide-react';
 
@@ -29,7 +29,7 @@ const DashboardPage: React.FC = () => {
     ]
   };
   
-  // Fonction pour obtenir les jeux filtrùs
+  // Fonction pour obtenir les jeux filtres
   const getFilteredGames = () => {
     let filtered = games;
     
@@ -48,10 +48,10 @@ const DashboardPage: React.FC = () => {
     return filtered;
   };
   
-  // Statistiques gùnùrales
+  // Statistiques generales
   const stats = getStats();
   
-  // Statistiques supplùmentaires
+  // Statistiques supplementaires
   const additionalStats = {
     averageRating: stats.averageRating,
     totalPlayTime: stats.totalPlayTime,
@@ -113,7 +113,7 @@ const DashboardPage: React.FC = () => {
   // Prepare data for line chart (timeline evolution)
   const prepareTimelineData = () => {
     // Simulate evolution data (to be replaced with real data)
-    // Dans une version rùelle, ces donnùes seraient stockùes avec des timestamps
+    // Dans une version reelle, ces donnees seraient stockees avec des timestamps
     return [
       { month: 'Jan', total: 10, backlog: 7, playing: 2, completed: 1 },
     { month: 'Feb', total: 15, backlog: 10, playing: 3, completed: 2 },
@@ -128,7 +128,7 @@ const DashboardPage: React.FC = () => {
     ];
   };
   
-  // Calculer le temps estimù pour terminer le backlog
+  // Calculer le temps estime pour terminer le backlog
   const calculateBacklogTime = () => {
     const backlogGames = games.filter(g => g.status === 'backlog').length;
     // Average estimation of 20 hours per game (to be refined with RAWG data)
@@ -158,7 +158,7 @@ const DashboardPage: React.FC = () => {
     );
   };
   
-  // Donnùes pour les graphiques
+  // Donnees pour les graphiques
   const statusData = prepareStatusData();
   const platformData = preparePlatformData();
   const timelineData = prepareTimelineData();
@@ -179,7 +179,7 @@ const DashboardPage: React.FC = () => {
       <div className="relative bg-gradient-to-r from-red-900 via-black to-black py-16 px-8">
         <div className="max-w-7xl mx-auto">
           <h1 className="text-5xl font-bold mb-4">Tableau de bord</h1>
-          <p className="text-xl text-gray-300 mb-8">Decouvrez vos statistiques de jeu et suivez vos progrùs</p>
+          <p className="text-xl text-gray-300 mb-8">Decouvrez vos statistiques de jeu et suivez vos progres</p>
           
           {/* Quick Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -212,7 +212,7 @@ const DashboardPage: React.FC = () => {
                 <Clock className="h-8 w-8 text-yellow-500" />
                 <span className="text-3xl font-bold">{stats.backlog}</span>
               </div>
-              <p className="text-gray-400">ù jouer</p>
+              <p className="text-gray-400">A jouer</p>
             </div>
           </div>
         </div>
@@ -240,7 +240,7 @@ const DashboardPage: React.FC = () => {
             <div className="bg-gray-900/50 backdrop-blur-sm rounded-lg p-6 border border-gray-800">
               <div className="flex items-center justify-between mb-2">
                 <Clock className="h-6 w-6 text-yellow-400" />
-                <span className="text-sm text-gray-400">ù jouer</span>
+                <span className="text-sm text-gray-400">A jouer</span>
               </div>
               <div className="text-2xl font-bold text-yellow-400">{stats.backlog}</div>
             </div>
@@ -346,7 +346,7 @@ const DashboardPage: React.FC = () => {
                 }`}
                 onClick={() => handleStatusChange('backlog')}
               >
-                ù jouer
+                A jouer
               </button>
               <button 
                 className={`px-6 py-3 rounded-lg font-medium transition-all duration-200 ${
@@ -509,7 +509,7 @@ const DashboardPage: React.FC = () => {
                 <Line 
                   type="monotone" 
                   dataKey="backlog" 
-                  name="ù jouer" 
+                  name="A jouer" 
                   stroke={COLORS.backlog} 
                   strokeWidth={2}
                   activeDot={{ r: 5 }}

@@ -1,8 +1,8 @@
 // Firebase configuration and initialization
-import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
-import { getAnalytics } from "firebase/analytics";
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+// import { getAnalytics } from "firebase/analytics"; // Commented out - not currently used
 
 // Firebase configuration
 // Configuration is loaded from environment variables
@@ -17,7 +17,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+// const analytics = getAnalytics(app); // Commented out - not currently used
 // Initialize Firebase Authentication and get a reference to the service
 export const auth = getAuth(app);
 

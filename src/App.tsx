@@ -4,12 +4,12 @@ import SearchPage from './components/SearchPage';
 import MyGamesPage from './components/MyGamesPage';
 import DashboardPage from './components/DashboardPage';
 import LoginPage from './components/LoginPage';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { AuthProvider, useAuth } from './contexts/PocketBaseAuthContext';
 import './App.css';
 
 // Composant principal de l'application
 const AppContent: React.FC = () => {
-  const { currentUser, logout } = useAuth();
+  const { user, logout } = useAuth();
   const [activeTab, setActiveTab] = useState<'search' | 'myGames' | 'dashboard'>('search');
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [showInstallBanner, setShowInstallBanner] = useState(false);
@@ -87,7 +87,7 @@ const AppContent: React.FC = () => {
             {/* User Menu */}
             <div className="flex items-center space-x-4">
               <span className="text-sm text-gray-300 hidden sm:block">
-                {currentUser?.email}
+                {user?.email}
               </span>
               <button
                 onClick={logout}
@@ -206,7 +206,7 @@ const App: React.FC = () => {
 };
 
 const AppWrapper: React.FC = () => {
-  const { currentUser, loading } = useAuth();
+  const { user, loading } = useAuth();
 
   if (loading) {
     return (
@@ -219,7 +219,7 @@ const AppWrapper: React.FC = () => {
     );
   }
 
-  if (!currentUser) {
+  if (!user) {
     return <LoginPage />;
   }
 
